@@ -50,10 +50,10 @@
 		<method name="abs">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the absolute value of parameter [code]s[/code]  (i.e. unsigned value, works for integer and float).
+				Returns the absolute value of parameter [code]num[/code]  (i.e. unsigned value, works for integer and float).
 				[codeblock]
 				# a is 1
 				a = abs(-1)
@@ -63,12 +63,12 @@
 		<method name="acos">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the arc cosine of [code]s[/code] in radians. Use to get the angle of cosine [code]s[/code].
+				Returns the arc cosine of [code]num[/code] in radians. Use to get the angle of cosine [code]num[/code].
 				[codeblock]
-				# c is 0.523599 or 30 degrees if converted with rad2deg(s)
+				# c is 0.523599 or 30 degrees if converted with rad2deg(num)
 				c = acos(0.866025)
 				[/codeblock]
 			</description>
@@ -76,10 +76,10 @@
 		<method name="asin">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the arc sine of [code]s[/code] in radians. Use to get the angle of sine [code]s[/code].
+				Returns the arc sine of [code]num[/code] in radians. Use to get the angle of sine [code]num[/code].
 				[codeblock]
 				# s is 0.523599 or 30 degrees if converted with rad2deg(s)
 				s = asin(0.5)
@@ -105,10 +105,10 @@
 		<method name="atan">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the arc tangent of [code]s[/code] in radians. Use it to get the angle from an angle's tangent in trigonometry: [code]atan(tan(angle)) == angle[/code].
+				Returns the arc tangent of [code]num[/code] in radians. Use it to get the angle from an angle's tangent in trigonometry: [code]atan(tan(angle)) == angle[/code].
 				The method cannot know in which quadrant the angle should fall. See [method atan2] if you always want an exact angle.
 				[codeblock]
 				a = atan(0.5) # a is 0.463648
@@ -152,10 +152,10 @@
 		<method name="ceil">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Rounds [code]s[/code] upward, returning the smallest integral value that is not less than [code]s[/code].
+				Rounds [code]num[/code] upward, returning the smallest integral value that is not less than [code]num[/code].
 				[codeblock]
 				i = ceil(1.45)  # i is 2
 				i = ceil(1.001) # i is 2
@@ -180,14 +180,14 @@
 		<method name="clamp">
 			<return type="float">
 			</return>
-			<argument index="0" name="val" type="float">
+			<argument index="0" name="value" type="float">
 			</argument>
 			<argument index="1" name="min" type="float">
 			</argument>
 			<argument index="2" name="max" type="float">
 			</argument>
 			<description>
-				Clamps [code]val[/code] and returns a value not less than [code]min[/code] and not more than [code]max[/code].
+				Clamps [code]value[/code] and returns a value not less than [code]min[/code] and not more than [code]max[/code].
 				[codeblock]
 				speed = 1000
 				# a is 20
@@ -222,10 +222,10 @@
 		<method name="cos">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the cosine of angle [code]s[/code] in radians.
+				Returns the cosine of angle [code]num[/code] in radians.
 				[codeblock]
 				# prints 1 and -1
 				print(cos(PI*2))
@@ -236,10 +236,10 @@
 		<method name="cosh">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the hyperbolic cosine of [code]s[/code] in radians.
+				Returns the hyperbolic cosine of [code]num[/code] in radians.
 				[codeblock]
 				# prints 1.543081
 				print(cosh(1))
@@ -310,7 +310,7 @@
 		<method name="ease">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="value" type="float">
 			</argument>
 			<argument index="1" name="curve" type="float">
 			</argument>
@@ -321,10 +321,10 @@
 		<method name="exp">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Raises the Euler's constant [b]e[/b] to the power of [code]s[/code] and returns it. [b]e[/b] has an approximate value of 2.71828.
+				Raises the Euler's constant [b]e[/b] to the power of [code]num[/code] and returns it. [b]e[/b] has an approximate value of 2.71828.
 				[codeblock]
 				a = exp(2) # approximately 7.39
 				[/codeblock]
@@ -333,10 +333,10 @@
 		<method name="floor">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Rounds [code]s[/code] to the closest smaller integer and returns it.
+				Rounds [code]num[/code] to the closest smaller integer and returns it.
 				[codeblock]
 				# a is 2
 				a = floor(2.99)
@@ -476,19 +476,19 @@
 		<method name="is_inf">
 			<return type="bool">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns True/False whether [code]s[/code] is an infinity value (either positive infinity or negative infinity).
+				Returns True/False whether [code]num[/code] is an infinity value (either positive infinity or negative infinity).
 			</description>
 		</method>
 		<method name="is_nan">
 			<return type="bool">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns True/False whether [code]s[/code] is a NaN (Not-A-Number) value.
+				Returns True/False whether [code]num[/code] is a NaN (Not-A-Number) value.
 			</description>
 		</method>
 		<method name="len">
@@ -545,7 +545,7 @@
 		<method name="log">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
 				Natural logarithm. The amount of time needed to reach a certain level of continuous growth. Note: This is not the same as the log function on your calculator which is a base 10 logarithm.
@@ -587,10 +587,10 @@
 		<method name="nearest_po2">
 			<return type="int">
 			</return>
-			<argument index="0" name="val" type="int">
+			<argument index="0" name="value" type="int">
 			</argument>
 			<description>
-				Returns the nearest larger power of 2 for integer [code]val[/code].
+				Returns the nearest larger power of 2 for integer [code]value[/code].
 				[codeblock]
 				nearest_po2(3) # returns 4
 				nearest_po2(4) # returns 4
@@ -838,10 +838,10 @@
 		<method name="round">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the integral value that is nearest to [code]s[/code], with halfway cases rounded away from zero.
+				Returns the integral value that is nearest to [code]num[/code], with halfway cases rounded away from zero.
 				[codeblock]
 				round(2.6) # returns 3
 				[/codeblock]
@@ -863,10 +863,10 @@
 		<method name="sign">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns sign of [code]s[/code] -1 or 1.
+				Returns sign of [code]num[/code] -1 or 1.
 				[codeblock]
 				sign(-6) # returns -1
 				sign(6)  # returns 1
@@ -876,10 +876,10 @@
 		<method name="sin">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the sine of angle [code]s[/code] in radians.
+				Returns the sine of angle [code]num[/code] in radians.
 				[codeblock]
 				sin(0.523599) # returns 0.5
 				[/codeblock]
@@ -888,10 +888,10 @@
 		<method name="sinh">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the hyperbolic sine of [code]s[/code].
+				Returns the hyperbolic sine of [code]num[/code].
 				[codeblock]
 				a = log(2.0) # returns 0.693147
 				sinh(a) # returns 0.75
@@ -901,10 +901,10 @@
 		<method name="sqrt">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the square root of [code]s[/code].
+				Returns the square root of [code]num[/code].
 				[codeblock]
 				sqrt(9) # returns 3
 				[/codeblock]
@@ -913,12 +913,12 @@
 		<method name="stepify">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<argument index="1" name="step" type="float">
 			</argument>
 			<description>
-				Snaps float value [code]s[/code] to a given [code]step[/code].
+				Snaps float value [code]num[/code] to a given [code]step[/code].
 			</description>
 		</method>
 		<method name="str" qualifiers="vararg">
@@ -951,10 +951,10 @@
 		<method name="tan">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the tangent of angle [code]s[/code] in radians.
+				Returns the tangent of angle [code]num[/code] in radians.
 				[codeblock]
 				tan( deg2rad(45) ) # returns 1
 				[/codeblock]
@@ -963,10 +963,10 @@
 		<method name="tanh">
 			<return type="float">
 			</return>
-			<argument index="0" name="s" type="float">
+			<argument index="0" name="num" type="float">
 			</argument>
 			<description>
-				Returns the hyperbolic tangent of [code]s[/code].
+				Returns the hyperbolic tangent of [code]num[/code].
 				[codeblock]
 				a = log(2.0) # returns 0.693147
 				tanh(a)      # returns 0.6

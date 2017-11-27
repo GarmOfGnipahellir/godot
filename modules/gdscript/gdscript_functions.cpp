@@ -1346,48 +1346,47 @@ MethodInfo GDScriptFunctions::get_info(Function p_func) {
 	switch (p_func) {
 
 		case MATH_SIN: {
-			MethodInfo mi("sin", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("sin", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
-
 		} break;
 		case MATH_COS: {
-			MethodInfo mi("cos", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("cos", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_TAN: {
-			MethodInfo mi("tan", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("tan", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_SINH: {
-			MethodInfo mi("sinh", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("sinh", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_COSH: {
-			MethodInfo mi("cosh", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("cosh", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_TANH: {
-			MethodInfo mi("tanh", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("tanh", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_ASIN: {
-			MethodInfo mi("asin", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("asin", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_ACOS: {
-			MethodInfo mi("acos", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("acos", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_ATAN: {
-			MethodInfo mi("atan", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("atan", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
@@ -1397,7 +1396,7 @@ MethodInfo GDScriptFunctions::get_info(Function p_func) {
 			return mi;
 		} break;
 		case MATH_SQRT: {
-			MethodInfo mi("sqrt", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("sqrt", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
@@ -1412,27 +1411,27 @@ MethodInfo GDScriptFunctions::get_info(Function p_func) {
 			return mi;
 		} break;
 		case MATH_FLOOR: {
-			MethodInfo mi("floor", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("floor", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_CEIL: {
-			MethodInfo mi("ceil", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("ceil", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_ROUND: {
-			MethodInfo mi("round", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("round", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_ABS: {
-			MethodInfo mi("abs", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("abs", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_SIGN: {
-			MethodInfo mi("sign", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("sign", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
@@ -1442,27 +1441,27 @@ MethodInfo GDScriptFunctions::get_info(Function p_func) {
 			return mi;
 		} break;
 		case MATH_LOG: {
-			MethodInfo mi("log", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("log", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_EXP: {
-			MethodInfo mi("exp", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("exp", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case MATH_ISNAN: {
-			MethodInfo mi("is_nan", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("is_nan", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::BOOL;
 			return mi;
 		} break;
 		case MATH_ISINF: {
-			MethodInfo mi("is_inf", PropertyInfo(Variant::REAL, "s"));
+			MethodInfo mi("is_inf", PropertyInfo(Variant::REAL, "num"));
 			mi.return_val.type = Variant::BOOL;
 			return mi;
 		} break;
 		case MATH_EASE: {
-			MethodInfo mi("ease", PropertyInfo(Variant::REAL, "s"), PropertyInfo(Variant::REAL, "curve"));
+			MethodInfo mi("ease", PropertyInfo(Variant::REAL, "value"), PropertyInfo(Variant::REAL, "curve"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
@@ -1472,7 +1471,7 @@ MethodInfo GDScriptFunctions::get_info(Function p_func) {
 			return mi;
 		} break;
 		case MATH_STEPIFY: {
-			MethodInfo mi("stepify", PropertyInfo(Variant::REAL, "s"), PropertyInfo(Variant::REAL, "step"));
+			MethodInfo mi("stepify", PropertyInfo(Variant::REAL, "value"), PropertyInfo(Variant::REAL, "step"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
@@ -1570,7 +1569,6 @@ MethodInfo GDScriptFunctions::get_info(Function p_func) {
 			MethodInfo mi("max", PropertyInfo(Variant::REAL, "a"), PropertyInfo(Variant::REAL, "b"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
-
 		} break;
 		case LOGIC_MIN: {
 			MethodInfo mi("min", PropertyInfo(Variant::REAL, "a"), PropertyInfo(Variant::REAL, "b"));
@@ -1578,12 +1576,12 @@ MethodInfo GDScriptFunctions::get_info(Function p_func) {
 			return mi;
 		} break;
 		case LOGIC_CLAMP: {
-			MethodInfo mi("clamp", PropertyInfo(Variant::REAL, "val"), PropertyInfo(Variant::REAL, "min"), PropertyInfo(Variant::REAL, "max"));
+			MethodInfo mi("clamp", PropertyInfo(Variant::REAL, "value"), PropertyInfo(Variant::REAL, "min"), PropertyInfo(Variant::REAL, "max"));
 			mi.return_val.type = Variant::REAL;
 			return mi;
 		} break;
 		case LOGIC_NEAREST_PO2: {
-			MethodInfo mi("nearest_po2", PropertyInfo(Variant::INT, "val"));
+			MethodInfo mi("nearest_po2", PropertyInfo(Variant::INT, "value"));
 			mi.return_val.type = Variant::INT;
 			return mi;
 		} break;

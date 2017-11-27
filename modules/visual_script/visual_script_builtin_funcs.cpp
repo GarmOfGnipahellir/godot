@@ -256,10 +256,10 @@ PropertyInfo VisualScriptBuiltinFunc::get_input_value_port_info(int p_idx) const
 		case MATH_ASIN:
 		case MATH_ACOS:
 		case MATH_ATAN:
-		case MATH_ATAN2:
 		case MATH_SQRT: {
 			return PropertyInfo(Variant::REAL, "num");
 		} break;
+		case MATH_ATAN2:
 		case MATH_FMOD:
 		case MATH_FPOSMOD: {
 			if (p_idx == 0)
@@ -275,7 +275,6 @@ PropertyInfo VisualScriptBuiltinFunc::get_input_value_port_info(int p_idx) const
 			return PropertyInfo(Variant::REAL, "num");
 
 		} break;
-
 		case MATH_POW: {
 			if (p_idx == 0)
 				return PropertyInfo(Variant::REAL, "x");
@@ -290,7 +289,7 @@ PropertyInfo VisualScriptBuiltinFunc::get_input_value_port_info(int p_idx) const
 		} break;
 		case MATH_EASE: {
 			if (p_idx == 0)
-				return PropertyInfo(Variant::REAL, "s");
+				return PropertyInfo(Variant::REAL, "value");
 			else
 				return PropertyInfo(Variant::REAL, "curve");
 		} break;
@@ -299,9 +298,9 @@ PropertyInfo VisualScriptBuiltinFunc::get_input_value_port_info(int p_idx) const
 		} break;
 		case MATH_STEPIFY: {
 			if (p_idx == 0)
-				return PropertyInfo(Variant::REAL, "s");
+				return PropertyInfo(Variant::REAL, "value");
 			else
-				return PropertyInfo(Variant::REAL, "steps");
+				return PropertyInfo(Variant::REAL, "step");
 		} break;
 		case MATH_LERP: {
 			if (p_idx == 0)
@@ -414,18 +413,18 @@ PropertyInfo VisualScriptBuiltinFunc::get_input_value_port_info(int p_idx) const
 		} break;
 		case LOGIC_CLAMP: {
 			if (p_idx == 0)
-				return PropertyInfo(Variant::REAL, "a");
+				return PropertyInfo(Variant::REAL, "value");
 			else if (p_idx == 0) // FIXME: is it ok to test p_idx == 0 twice?
 				return PropertyInfo(Variant::REAL, "min");
 			else
 				return PropertyInfo(Variant::REAL, "max");
 		} break;
 		case LOGIC_NEAREST_PO2: {
-			return PropertyInfo(Variant::INT, "num");
+			return PropertyInfo(Variant::INT, "value");
 		} break;
 		case OBJ_WEAKREF: {
 
-			return PropertyInfo(Variant::OBJECT, "source");
+			return PropertyInfo(Variant::OBJECT, "obj");
 
 		} break;
 		case FUNC_FUNCREF: {
