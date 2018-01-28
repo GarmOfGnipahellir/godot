@@ -55,8 +55,11 @@ public:
 		Vector<ShaderLanguage::ShaderNode::Uniform::Hint> texture_hints;
 
 		Vector<uint32_t> uniform_offsets;
+		Vector<uint32_t> const_offsets;
 		uint32_t uniform_total_size;
+		uint32_t const_total_size;
 		String uniforms;
+		String constants;
 		String vertex_global;
 		String vertex;
 		String fragment_global;

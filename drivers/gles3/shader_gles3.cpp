@@ -516,6 +516,13 @@ ShaderGLES3::Version *ShaderGLES3::get_current_version() {
 		ERR_FAIL_V(NULL);
 	}
 
+	/* CONSTANTS */
+	for (int j = 0; j < const_count; j++) {
+		//strings.push_back(const_names[j]);
+		print_line("const " + String(const_names[j]));
+	}
+
+
 	/* UNIFORMS */
 
 	glUseProgram(v.id);
@@ -570,6 +577,11 @@ GLint ShaderGLES3::get_uniform_location(const String &p_name) const {
 
 	ERR_FAIL_COND_V(!version, -1);
 	return glGetUniformLocation(version->id, p_name.ascii().get_data());
+}
+
+void ShaderGLES3::setup_constants(const char **p_const_names, int p_const_count) {
+	const_count = p_const_count;
+	const_names = p_const_names;
 }
 
 void ShaderGLES3::setup(const char **p_conditional_defines, int p_conditional_count, const char **p_uniform_names, int p_uniform_count, const AttributePair *p_attribute_pairs, int p_attribute_count, const TexUnitPair *p_texunit_pairs, int p_texunit_pair_count, const UBOPair *p_ubo_pairs, int p_ubo_pair_count, const Feedback *p_feedback, int p_feedback_count, const char *p_vertex_code, const char *p_fragment_code, int p_vertex_code_start, int p_fragment_code_start) {

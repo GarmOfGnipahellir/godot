@@ -182,6 +182,7 @@ const char *ShaderLanguage::token_names[TK_MAX] = {
 	"COLON",
 	"SEMICOLON",
 	"PERIOD",
+	"CONSTANT",
 	"UNIFORM",
 	"VARYING",
 	"IN",
@@ -272,6 +273,7 @@ const ShaderLanguage::KeyWord ShaderLanguage::keyword_list[] = {
 	{ TK_CF_CONTINUE, "continue" },
 	{ TK_CF_RETURN, "return" },
 	{ TK_CF_DISCARD, "discard" },
+	{ TK_CONSTANT, "const" },
 	{ TK_UNIFORM, "uniform" },
 	{ TK_VARYING, "varying" },
 	{ TK_ARG_IN, "in" },
@@ -808,6 +810,16 @@ bool ShaderLanguage::_find_identifier(const BlockNode *p_block, const Map<String
 				return true;
 			}
 		}
+	}
+
+	if (shader->constants.has(p_identifier)) {
+		if (r_data_type) {
+			*r_data_type = shader->constants[p_identifier].type;
+		}
+		if (r_type) {
+			*r_type = IDENTIFIER_CONSTANT;
+		}
+		return true;
 	}
 
 	if (shader->varyings.has(p_identifier)) {
@@ -3595,10 +3607,12 @@ Error ShaderLanguage::_parse_shader(const Map<StringName, FunctionInfo> &p_funct
 					}
 				}
 			} break;
+			case TK_CONSTANT:
 			case TK_UNIFORM:
 			case TK_VARYING: {
 
 				bool uniform = tk.type == TK_UNIFORM;
+				bool constant = tk.type == TK_CONSTANT;
 				DataPrecision precision = PRECISION_DEFAULT;
 				DataInterpolation interpolation = INTERPOLATION_SMOOTH;
 				DataType type;
@@ -3622,13 +3636,26 @@ Error ShaderLanguage::_parse_shader(const Map<StringName, FunctionInfo> &p_funct
 
 				type = get_token_datatype(tk.type);
 
+
+
 				if (type == TYPE_VOID) {
 					_set_error("void datatype not allowed here");
 					return ERR_PARSE_ERROR;
 				}
-				if (!uniform && type < TYPE_FLOAT && type > TYPE_VEC4) { // FIXME: always false! should it be || instead?
-					_set_error("Invalid type for varying, only float,vec2,vec3,vec4 allowed.");
-					return ERR_PARSE_ERROR;
+
+				if(constant)
+				{
+					if(type != TYPE_FLOAT && type != TYPE_INT && type != TYPE_UINT && type != TYPE_BOOL)
+					{
+						_set_error("Invalid type for const, only float,int,uint,bool allowed.");
+						return ERR_PARSE_ERROR;
+					}
+				}
+				else {
+					if (!uniform && type < TYPE_FLOAT && type > TYPE_VEC4) { // FIXME: always false! should it be || instead?
+						_set_error("Invalid type for varying, only float,vec2,vec3,vec4 allowed.");
+						return ERR_PARSE_ERROR;
+					}
 				}
 
 				tk = _get_token();
@@ -3802,7 +3829,42 @@ Error ShaderLanguage::_parse_shader(const Map<StringName, FunctionInfo> &p_funct
 						_set_error("Expected ';'");
 						return ERR_PARSE_ERROR;
 					}
-				} else {
+				} else if(constant) {
+
+					ShaderNode::Constant constant;
+					constant.type = type;
+
+					tk = _get_token();
+
+					if (tk.type == TK_OP_ASSIGN) {
+
+						Node *expr = _parse_and_reduce_expression(NULL, Map<StringName, BuiltInInfo>());
+						if (!expr)
+							return ERR_PARSE_ERROR;
+						if (expr->type != Node::TYPE_CONSTANT) {
+							_set_error("Expected constant expression after '='");
+							return ERR_PARSE_ERROR;
+						}
+
+						ConstantNode *cn = static_cast<ConstantNode *>(expr);
+
+						constant.default_value.resize(cn->values.size());
+
+						if (!convert_constant(cn, constant.type, constant.default_value.ptrw())) {
+							_set_error("Can't convert constant to " + get_datatype_name(constant.type));
+							return ERR_PARSE_ERROR;
+						}
+						tk = _get_token();
+					}
+
+					shader->constants[name] = constant;
+
+					if (tk.type != TK_SEMICOLON) {
+						_set_error("Expected ';'");
+						return ERR_PARSE_ERROR;
+					}
+				}
+				else{
 
 					ShaderNode::Varying varying;
 					varying.type = type;
@@ -4118,6 +4180,9 @@ Error ShaderLanguage::complete(const String &p_code, const Map<StringName, Funct
 			}
 
 			if (comp_ident) {
+				for (const Map<StringName, ShaderNode::Constant>::Element *E = shader->constants.front(); E; E = E->next()) {
+					matches.insert(E->key());
+				}
 				for (const Map<StringName, ShaderNode::Varying>::Element *E = shader->varyings.front(); E; E = E->next()) {
 					matches.insert(E->key());
 				}

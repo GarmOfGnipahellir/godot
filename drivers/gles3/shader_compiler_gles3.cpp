@@ -350,6 +350,17 @@ String ShaderCompilerGLES3::_dump_node_code(SL::Node *p_node, int p_level, Gener
 			uniform_defines.resize(max_uniforms);
 			bool uses_uniforms = false;
 
+			for (Map<StringName, SL::ShaderNode::Constant>::Element *E = pnode->constants.front(); E; E = E->next()) {
+
+				String ucode;
+				if(SL::is_scalar_type(E->get().type)) {
+					ucode = "const ";
+				}
+				ucode += _typestr(E->get().type);
+				ucode += " " + _mkid(E->key());
+				ucode += ";\n";
+
+			}
 			for (Map<StringName, SL::ShaderNode::Uniform>::Element *E = pnode->uniforms.front(); E; E = E->next()) {
 
 				String ucode;

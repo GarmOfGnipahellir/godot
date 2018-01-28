@@ -134,6 +134,7 @@ public:
 		TK_COLON,
 		TK_SEMICOLON,
 		TK_PERIOD,
+		TK_CONSTANT,
 		TK_UNIFORM,
 		TK_VARYING,
 		TK_ARG_IN,
@@ -445,6 +446,12 @@ public:
 			DataPrecision precission;
 		};
 
+		struct Constant {
+			DataType type;
+			Vector<ConstantNode::Value> default_value;
+		};
+		
+
 		struct Uniform {
 			enum Hint {
 				HINT_NONE,
@@ -477,6 +484,7 @@ public:
 
 		Map<StringName, Varying> varyings;
 		Map<StringName, Uniform> uniforms;
+		Map<StringName, Constant> constants;
 		Vector<StringName> render_modes;
 
 		Vector<Function> functions;
@@ -605,6 +613,7 @@ private:
 
 	enum IdentifierType {
 		IDENTIFIER_FUNCTION,
+		IDENTIFIER_CONSTANT,
 		IDENTIFIER_UNIFORM,
 		IDENTIFIER_VARYING,
 		IDENTIFIER_FUNCTION_ARGUMENT,
