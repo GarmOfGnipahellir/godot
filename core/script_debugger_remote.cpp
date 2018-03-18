@@ -29,7 +29,7 @@
 /*************************************************************************/
 
 #include "script_debugger_remote.h"
-
+#include "message_type.h"
 #include "engine.h"
 #include "io/ip.h"
 #include "io/marshalls.h"
@@ -933,7 +933,7 @@ void ScriptDebuggerRemote::send_error(const String &p_func, const String &p_file
 	mutex->unlock();
 }
 
-void ScriptDebuggerRemote::_print_handler(void *p_this, const String &p_string, bool p_error) {
+void ScriptDebuggerRemote::_print_handler(void *p_this, const String &p_string, int p_type) {
 
 	ScriptDebuggerRemote *sdr = (ScriptDebuggerRemote *)p_this;
 
@@ -1065,6 +1065,7 @@ ScriptDebuggerRemote::ScriptDebuggerRemote() :
 	add_print_handler(&phl);
 
 	eh.errfunc = _err_handler;
+	eh.warnfunc = _err_handler; // TODO: independent warning processing ?
 	eh.userdata = this;
 	add_error_handler(&eh);
 

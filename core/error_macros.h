@@ -62,12 +62,14 @@ void _err_clear_last_error();
 struct ErrorHandlerList {
 
 	ErrorHandlerFunc errfunc;
+	ErrorHandlerFunc warnfunc;
 	void *userdata;
 
 	ErrorHandlerList *next;
 
 	ErrorHandlerList() {
 		errfunc = 0;
+		warnfunc = 0;
 		next = 0;
 		userdata = 0;
 	}
@@ -78,6 +80,7 @@ void remove_error_handler(ErrorHandlerList *p_handler);
 
 void _err_print_error(const char *p_function, const char *p_file, int p_line, const char *p_error, ErrorHandlerType p_type = ERR_HANDLER_ERROR);
 void _err_print_index_error(const char *p_function, const char *p_file, int p_line, int64_t p_index, int64_t p_size, const char *p_index_str, const char *p_size_str, bool fatal = false);
+void _err_print_warning(const char *p_function, const char *p_file, int p_line, const char *p_warning, ErrorHandlerType p_type = ERR_HANDLER_ERROR);
 
 #ifndef _STR
 #define _STR(m_x) #m_x
@@ -301,13 +304,13 @@ extern bool _err_error_exists;
 
 #define WARN_PRINT(m_string)                                                               \
 	{                                                                                      \
-		_err_print_error(FUNCTION_STR, __FILE__, __LINE__, m_string, ERR_HANDLER_WARNING); \
+		_err_print_warning(FUNCTION_STR, __FILE__, __LINE__, m_string, ERR_HANDLER_WARNING); \
 		_err_error_exists = false;                                                         \
 	}
 
 #define WARN_PRINTS(m_string)                                                                                        \
 	{                                                                                                                \
-		_err_print_error(FUNCTION_STR, __FILE__, __LINE__, String(m_string).utf8().get_data(), ERR_HANDLER_WARNING); \
+		_err_print_warning(FUNCTION_STR, __FILE__, __LINE__, String(m_string).utf8().get_data(), ERR_HANDLER_WARNING); \
 		_err_error_exists = false;                                                                                   \
 	}
 

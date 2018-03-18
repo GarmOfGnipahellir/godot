@@ -105,3 +105,23 @@ void _err_print_index_error(const char *p_function, const char *p_file, int p_li
 	String err(fstr + "Index " + p_index_str + "=" + itos(p_index) + " out of size (" + p_size_str + "=" + itos(p_size) + ")");
 	_err_print_error(p_function, p_file, p_line, err.utf8().get_data());
 }
+
+void _err_print_warning(const char *p_function, const char *p_file, int p_line, const char *p_warning, ErrorHandlerType p_type) {
+
+	OS::get_singleton()->print_error(p_function, p_file, p_line, p_warning, _err_error_exists ? OS::get_singleton()->get_last_error() : "", (Logger::ErrorType)p_type);
+
+	_global_lock();
+	ErrorHandlerList *l = error_handler_list;
+	while (l) {
+
+		l->warnfunc(l->userdata, p_function, p_file, p_line, p_warning, _err_error_exists ? OS::get_singleton()->get_last_error() : "", p_type);
+		l = l->next;
+	}
+
+	_global_unlock();
+
+	if (_err_error_exists) {
+		OS::get_singleton()->clear_last_error();
+		_err_error_exists = false;
+	}
+}

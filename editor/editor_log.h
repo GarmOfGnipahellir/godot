@@ -42,6 +42,8 @@
 #include "scene/gui/panel_container.h"
 #include "scene/gui/texture_rect.h"
 #include "scene/gui/tool_button.h"
+#include "core/message_type.h"
+
 class EditorLog : public VBoxContainer {
 
 	GDCLASS(EditorLog, VBoxContainer);
@@ -54,7 +56,8 @@ class EditorLog : public VBoxContainer {
 	ToolButton *tool_button;
 
 	static void _error_handler(void *p_self, const char *p_func, const char *p_file, int p_line, const char *p_error, const char *p_errorexp, ErrorHandlerType p_type);
-
+	static void _warning_handler(void *p_self, const char *p_func, const char *p_file, int p_line, const char *p_warning, const char *p_warningexp, ErrorHandlerType p_type);
+	
 	ErrorHandlerList eh;
 
 	Thread::ID current;
@@ -68,7 +71,7 @@ protected:
 	void _notification(int p_what);
 
 public:
-	void add_message(const String &p_msg, bool p_error = false);
+	void add_message(const String &p_msg, int p_type = MSGTYPE_TEXT);
 	void set_tool_button(ToolButton *p_tool_button);
 	void deinit();
 

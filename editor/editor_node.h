@@ -627,7 +627,7 @@ private:
 	Vector<Ref<EditorResourceConversionPlugin> > resource_conversion_plugins;
 
 	PrintHandlerList print_handler;
-	static void _print_handler(void *p_this, const String &p_string, bool p_error);
+	static void _print_handler(void *p_this, const String &p_string, int p_type);
 
 protected:
 	void _notification(int p_what);

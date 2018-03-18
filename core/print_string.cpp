@@ -29,6 +29,7 @@
 /*************************************************************************/
 
 #include "print_string.h"
+#include "message_type.h"
 
 #include "os/os.h"
 
@@ -83,7 +84,25 @@ void print_line(String p_string) {
 	PrintHandlerList *l = print_handler_list;
 	while (l) {
 
-		l->printfunc(l->userdata, p_string, false);
+		l->printfunc(l->userdata, p_string, MSGTYPE_TEXT);
+		l = l->next;
+	}
+
+	_global_unlock();
+}
+
+void print_warning(String p_string) {
+
+	if (!_print_line_enabled)
+		return;
+
+	OS::get_singleton()->print("%s\n", p_string.utf8().get_data());
+
+	_global_lock();
+	PrintHandlerList *l = print_handler_list;
+	while (l) {
+
+		l->printfunc(l->userdata, p_string, MSGTYPE_WARNING);
 		l = l->next;
 	}
 
@@ -101,7 +120,7 @@ void print_error(String p_string) {
 	PrintHandlerList *l = print_handler_list;
 	while (l) {
 
-		l->printfunc(l->userdata, p_string, true);
+		l->printfunc(l->userdata, p_string, MSGTYPE_ERROR);
 		l = l->next;
 	}
 

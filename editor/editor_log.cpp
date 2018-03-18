@@ -54,7 +54,23 @@ void EditorLog::_error_handler(void *p_self, const char *p_func, const char *p_f
 		self->emit_signal("show_request");
 	*/
 
-	self->add_message(err_str, true);
+	self->add_message(err_str, MSGTYPE_ERROR);
+}
+
+void EditorLog::_warning_handler(void *p_self, const char *p_func, const char *p_file, int p_line, const char *p_warning, const char *p_warningexp, ErrorHandlerType p_type) {
+
+	EditorLog *self = (EditorLog *)p_self;
+	if (self->current != Thread::get_caller_id())
+		return;
+
+	String err_str;
+	if (p_warningexp && p_warningexp[0]) {
+		err_str = p_warningexp;
+	} else {
+		err_str = String(p_file) + ":" + itos(p_line) + " - " + String(p_warning);
+	}
+
+	self->add_message(err_str, MSGTYPE_WARNING);
 }
 
 void EditorLog::_notification(int p_what) {
@@ -95,22 +111,36 @@ void EditorLog::clear() {
 	_clear_request();
 }
 
-void EditorLog::add_message(const String &p_msg, bool p_error) {
+void EditorLog::add_message(const String &p_msg, int p_type) {
 
 	log->add_newline();
 
-	if (p_error) {
-		log->push_color(get_color("error_color", "Editor"));
-		Ref<Texture> icon = get_icon("Error", "EditorIcons");
-		log->add_image(icon);
-		log->add_text(" ");
-		tool_button->set_icon(icon);
+	switch(p_type)
+	{
+		case MSGTYPE_ERROR:
+			{
+				Ref<Texture> icon = get_icon("Error", "EditorIcons");
+				log->add_image(icon);
+				log->push_color(get_color("error_color", "Editor"));
+				log->add_text(" ");
+				tool_button->set_icon(icon);
+			}
+			break;
+		case MSGTYPE_WARNING:
+			{
+				Ref<Texture> icon = get_icon("Warning", "EditorIcons");
+				log->add_image(icon);
+				log->push_color(get_color("warning_color", "Editor"));
+				log->add_text(" ");
+				tool_button->set_icon(icon);
+			}
+			break;
 	}
 
 	log->add_text(p_msg);
 	//button->set_text(p_msg);
 
-	if (p_error)
+	if (p_type == MSGTYPE_ERROR || p_type == MSGTYPE_WARNING)
 		log->pop();
 }
 
@@ -176,6 +206,7 @@ EditorLog::EditorLog() {
 	//log->add_text("Initialization Complete.\n"); //because it looks cool.
 
 	eh.errfunc = _error_handler;
+	eh.warnfunc = _warning_handler;
 	eh.userdata = this;
 	add_error_handler(&eh);
 

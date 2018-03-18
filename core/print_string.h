@@ -35,7 +35,7 @@
 
 extern void (*_print_func)(String);
 
-typedef void (*PrintHandlerFunc)(void *, const String &p_string, bool p_error);
+typedef void (*PrintHandlerFunc)(void *, const String &p_string, int p_type);
 
 struct PrintHandlerList {
 
@@ -57,6 +57,7 @@ void remove_print_handler(PrintHandlerList *p_handler);
 extern bool _print_line_enabled;
 extern bool _print_error_enabled;
 extern void print_line(String p_string);
+extern void print_warning(String p_string);
 extern void print_error(String p_string);
 
 #endif
