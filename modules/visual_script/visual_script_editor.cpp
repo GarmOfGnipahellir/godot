@@ -2899,8 +2899,7 @@ void VisualScriptEditor::_notification(int p_what) {
 				node_styles[E->get().first] = frame_style;
 			}
 		}
-	}
-	if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
+	} else if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
 		left_vsplit->set_visible(is_visible_in_tree());
 	}
 }

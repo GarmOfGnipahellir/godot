@@ -368,17 +368,13 @@ void CSGShape::_notification(int p_what) {
 		}
 
 		_make_dirty();
-	}
-
-	if (p_what == NOTIFICATION_LOCAL_TRANSFORM_CHANGED) {
+	} else if (p_what == NOTIFICATION_LOCAL_TRANSFORM_CHANGED) {
 
 		//print_line("local xform changed");
 		if (parent) {
 			parent->_make_dirty();
 		}
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		if (parent)
 			parent->_make_dirty();

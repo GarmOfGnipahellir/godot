@@ -3081,9 +3081,7 @@ void CanvasItemEditor::_notification(int p_what) {
 				viewport->update();
 			}
 		}
-	}
-
-	if (p_what == NOTIFICATION_ENTER_TREE) {
+	} else if (p_what == NOTIFICATION_ENTER_TREE) {
 
 		select_sb->set_texture(get_icon("EditorRect2D", "EditorIcons"));
 		for (int i = 0; i < 4; i++) {
@@ -3099,14 +3097,10 @@ void CanvasItemEditor::_notification(int p_what) {
 	} else if (p_what == EditorSettings::NOTIFICATION_EDITOR_SETTINGS_CHANGED) {
 
 		select_sb->set_texture(get_icon("EditorRect2D", "EditorIcons"));
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 		get_tree()->disconnect("node_added", this, "_tree_changed");
 		get_tree()->disconnect("node_removed", this, "_tree_changed");
-	}
-
-	if (p_what == NOTIFICATION_ENTER_TREE || p_what == EditorSettings::NOTIFICATION_EDITOR_SETTINGS_CHANGED) {
+	} else if (p_what == NOTIFICATION_ENTER_TREE || p_what == EditorSettings::NOTIFICATION_EDITOR_SETTINGS_CHANGED) {
 		select_button->set_icon(get_icon("ToolSelect", "EditorIcons"));
 		list_select_button->set_icon(get_icon("ListSelect", "EditorIcons"));
 		move_button->set_icon(get_icon("ToolMove", "EditorIcons"));

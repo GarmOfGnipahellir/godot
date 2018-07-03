@@ -491,8 +491,7 @@ void ShaderEditor::_menu_option(int p_option) {
 void ShaderEditor::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_ENTER_TREE) {
-	}
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 	}
 }
 

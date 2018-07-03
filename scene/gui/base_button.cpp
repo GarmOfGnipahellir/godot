@@ -246,28 +246,21 @@ void BaseButton::_notification(int p_what) {
 
 		status.hovering = true;
 		update();
-	}
-
-	if (p_what == NOTIFICATION_MOUSE_EXIT) {
+	} else if (p_what == NOTIFICATION_MOUSE_EXIT) {
 		status.hovering = false;
 		update();
-	}
-	if (p_what == NOTIFICATION_DRAG_BEGIN || p_what == NOTIFICATION_SCROLL_BEGIN) {
+	} else if (p_what == NOTIFICATION_DRAG_BEGIN || p_what == NOTIFICATION_SCROLL_BEGIN) {
 
 		if (status.press_attempt) {
 			status.press_attempt = false;
 			status.pressing_button = 0;
 			update();
 		}
-	}
-
-	if (p_what == NOTIFICATION_FOCUS_ENTER) {
+	} else if (p_what == NOTIFICATION_FOCUS_ENTER) {
 
 		status.hovering = true;
 		update();
-	}
-
-	if (p_what == NOTIFICATION_FOCUS_EXIT) {
+	} else if (p_what == NOTIFICATION_FOCUS_EXIT) {
 
 		if (status.pressing_button && status.press_attempt) {
 			status.press_attempt = false;
@@ -278,15 +271,9 @@ void BaseButton::_notification(int p_what) {
 			status.hovering = false;
 			update();
 		}
-	}
-
-	if (p_what == NOTIFICATION_ENTER_TREE) {
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
-	}
-
-	if (p_what == NOTIFICATION_VISIBILITY_CHANGED && !is_visible_in_tree()) {
+	} else if (p_what == NOTIFICATION_ENTER_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_VISIBILITY_CHANGED && !is_visible_in_tree()) {
 
 		if (!toggle_mode) {
 			status.pressed = false;

@@ -687,9 +687,7 @@ void AnimationNodeBlendSpace2DEditor::_notification(int p_what) {
 		open_editor->set_icon(get_icon("Edit", "EditorIcons"));
 		goto_parent->set_icon(get_icon("MoveUp", "EditorIcons"));
 		auto_triangles->set_icon(get_icon("AutoTriangle", "EditorIcons"));
-	}
-
-	if (p_what == NOTIFICATION_PROCESS) {
+	} else if (p_what == NOTIFICATION_PROCESS) {
 
 		String error;
 

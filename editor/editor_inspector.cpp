@@ -154,9 +154,7 @@ void EditorProperty::_notification(int p_what) {
 		}
 
 		update(); //need to redraw text
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 		Ref<Font> font = get_font("font", "Tree");
 
 		Size2 size = get_size();
@@ -1039,7 +1037,7 @@ void EditorInspectorSection::setup(const String &p_section, const String &p_labe
 			vbox->hide();
 		}
 	}
-		//	void editor_set_section_unfold(const String &p_section, bool p_unfolded);
+	//	void editor_set_section_unfold(const String &p_section, bool p_unfolded);
 
 #endif
 }

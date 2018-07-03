@@ -277,9 +277,7 @@ void GraphNode::_notification(int p_what) {
 		if (resizable) {
 			draw_texture(resizer, get_size() - resizer->get_size());
 		}
-	}
-
-	if (p_what == NOTIFICATION_SORT_CHILDREN) {
+	} else if (p_what == NOTIFICATION_SORT_CHILDREN) {
 
 		_resort();
 	}

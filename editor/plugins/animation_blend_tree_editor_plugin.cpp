@@ -597,9 +597,7 @@ void AnimationNodeBlendTreeEditor::_notification(int p_what) {
 
 		error_panel->add_style_override("panel", get_stylebox("bg", "Tree"));
 		error_label->add_color_override("font_color", get_color("error_color", "Editor"));
-	}
-
-	if (p_what == NOTIFICATION_PROCESS) {
+	} else if (p_what == NOTIFICATION_PROCESS) {
 
 		String error;
 

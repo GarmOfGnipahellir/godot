@@ -272,9 +272,7 @@ void Skeleton2D::_notification(int p_what) {
 			_update_transform();
 
 		request_ready();
-	}
-
-	if (p_what == NOTIFICATION_TRANSFORM_CHANGED) {
+	} else if (p_what == NOTIFICATION_TRANSFORM_CHANGED) {
 		VS::get_singleton()->skeleton_set_base_transform_2d(skeleton, get_global_transform());
 	}
 }

@@ -247,8 +247,7 @@ void EditorNode::_notification(int p_what) {
 		editor_data.save_editor_external_data();
 		FileAccess::set_file_close_fail_notify_callback(NULL);
 		log->deinit(); // do not get messages anymore
-	}
-	if (p_what == NOTIFICATION_PROCESS) {
+	} else if (p_what == NOTIFICATION_PROCESS) {
 
 		if (opening_prev && !confirmation->is_visible())
 			opening_prev = false;
@@ -287,8 +286,7 @@ void EditorNode::_notification(int p_what) {
 		scene_root->set_size_override(true, Size2(ProjectSettings::get_singleton()->get("display/window/size/width"), ProjectSettings::get_singleton()->get("display/window/size/height")));
 
 		ResourceImporterTexture::get_singleton()->update_imports();
-	}
-	if (p_what == NOTIFICATION_ENTER_TREE) {
+	} else if (p_what == NOTIFICATION_ENTER_TREE) {
 
 		Engine::get_singleton()->set_editor_hint(true);
 
@@ -298,13 +296,10 @@ void EditorNode::_notification(int p_what) {
 		get_tree()->get_root()->set_as_audio_listener_2d(false);
 		get_tree()->set_auto_accept_quit(false);
 		get_tree()->connect("files_dropped", this, "_dropped_files");
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		editor_data.clear_edited_scenes();
-	}
-	if (p_what == NOTIFICATION_READY) {
+	} else if (p_what == NOTIFICATION_READY) {
 
 		VisualServer::get_singleton()->viewport_set_hide_scenario(get_scene_root()->get_viewport_rid(), true);
 		VisualServer::get_singleton()->viewport_set_hide_canvas(get_scene_root()->get_viewport_rid(), true);
@@ -313,19 +308,13 @@ void EditorNode::_notification(int p_what) {
 		_editor_select(EDITOR_3D);
 		_update_debug_options();
 		_load_docks();
-	}
-
-	if (p_what == MainLoop::NOTIFICATION_WM_FOCUS_IN) {
+	} else if (p_what == MainLoop::NOTIFICATION_WM_FOCUS_IN) {
 
 		EditorFileSystem::get_singleton()->scan_changes();
-	}
-
-	if (p_what == MainLoop::NOTIFICATION_WM_QUIT_REQUEST) {
+	} else if (p_what == MainLoop::NOTIFICATION_WM_QUIT_REQUEST) {
 
 		_menu_option_confirm(FILE_QUIT, false);
-	}
-
-	if (p_what == EditorSettings::NOTIFICATION_EDITOR_SETTINGS_CHANGED) {
+	} else if (p_what == EditorSettings::NOTIFICATION_EDITOR_SETTINGS_CHANGED) {
 		scene_tabs->set_tab_close_display_policy((bool(EDITOR_GET("interface/scene_tabs/always_show_close_button")) ? Tabs::CLOSE_BUTTON_SHOW_ALWAYS : Tabs::CLOSE_BUTTON_SHOW_ACTIVE_ONLY));
 		Ref<Theme> theme = create_editor_theme(theme_base->get_theme());
 
@@ -398,9 +387,7 @@ void EditorNode::_notification(int p_what) {
 		p->set_item_icon(p->get_item_index(HELP_ISSUES), gui_base->get_icon("Instance", "EditorIcons"));
 		p->set_item_icon(p->get_item_index(HELP_COMMUNITY), gui_base->get_icon("Instance", "EditorIcons"));
 		p->set_item_icon(p->get_item_index(HELP_ABOUT), gui_base->get_icon("Godot", "EditorIcons"));
-	}
-
-	if (p_what == Control::NOTIFICATION_RESIZED) {
+	} else if (p_what == Control::NOTIFICATION_RESIZED) {
 		_update_scene_tabs();
 	}
 }

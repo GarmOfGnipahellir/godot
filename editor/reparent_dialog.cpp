@@ -39,14 +39,10 @@ void ReparentDialog::_notification(int p_what) {
 	if (p_what == NOTIFICATION_ENTER_TREE) {
 
 		connect("confirmed", this, "_reparent");
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		disconnect("confirmed", this, "_reparent");
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		//RID ci = get_canvas_item();
 		//get_stylebox("panel","PopupMenu")->draw(ci,Rect2(Point2(),get_size()));

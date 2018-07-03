@@ -71,9 +71,7 @@ void PanelContainer::_notification(int p_what) {
 			style = get_stylebox("panel", "PanelContainer");
 
 		style->draw(ci, Rect2(Point2(), get_size()));
-	}
-
-	if (p_what == NOTIFICATION_SORT_CHILDREN) {
+	} else if (p_what == NOTIFICATION_SORT_CHILDREN) {
 
 		Ref<StyleBox> style;
 

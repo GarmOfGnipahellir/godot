@@ -609,9 +609,7 @@ void BakedLightmap::_notification(int p_what) {
 			_assign_lightmaps();
 		}
 		request_ready(); //will need ready again if re-enters tree
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		if (light_data.is_valid()) {
 			_clear_lightmaps();

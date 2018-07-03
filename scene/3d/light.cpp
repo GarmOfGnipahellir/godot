@@ -181,13 +181,9 @@ void Light::_notification(int p_what) {
 	if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
 
 		_update_visibility();
-	}
-
-	if (p_what == NOTIFICATION_ENTER_TREE) {
+	} else if (p_what == NOTIFICATION_ENTER_TREE) {
 		_update_visibility();
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 	}
 }
 

@@ -120,18 +120,14 @@ void AudioStreamPlayer::_notification(int p_what) {
 		if (autoplay && !Engine::get_singleton()->is_editor_hint()) {
 			play();
 		}
-	}
-
-	if (p_what == NOTIFICATION_INTERNAL_PROCESS) {
+	} else if (p_what == NOTIFICATION_INTERNAL_PROCESS) {
 
 		if (!active || (setseek < 0 && !stream_playback->is_playing())) {
 			active = false;
 			set_process_internal(false);
 			emit_signal("finished");
 		}
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		AudioServer::get_singleton()->remove_callback(_mix_audios, this);
 	}

@@ -59,18 +59,14 @@ void EditorAudioBus::_notification(int p_what) {
 
 		update_bus();
 		set_process(true);
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		if (has_focus()) {
 			draw_style_box(get_stylebox("focus", "Button"), Rect2(Vector2(), get_size()));
 		} else if (is_master) {
 			draw_style_box(get_stylebox("disabled", "Button"), Rect2(Vector2(), get_size()));
 		}
-	}
-
-	if (p_what == NOTIFICATION_PROCESS) {
+	} else if (p_what == NOTIFICATION_PROCESS) {
 
 		for (int i = 0; i < cc; i++) {
 			float real_peak[2] = { -100, -100 };
@@ -109,9 +105,7 @@ void EditorAudioBus::_notification(int p_what) {
 				channel[i].prev_active = activity_found;
 			}
 		}
-	}
-
-	if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
+	} else if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
 
 		for (int i = 0; i < 4; i++) {
 			channel[i].peak_l = -100;
@@ -120,9 +114,7 @@ void EditorAudioBus::_notification(int p_what) {
 		}
 
 		set_process(is_visible_in_tree());
-	}
-
-	if (p_what == NOTIFICATION_THEME_CHANGED) {
+	} else if (p_what == NOTIFICATION_THEME_CHANGED) {
 
 		for (int i = 0; i < cc; i++) {
 			channel[i].vu_l->set_under_texture(get_icon("BusVuEmpty", "EditorIcons"));

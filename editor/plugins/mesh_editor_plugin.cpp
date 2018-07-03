@@ -49,9 +49,7 @@ void MeshEditor::_gui_input(Ref<InputEvent> p_event) {
 void MeshEditor::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_PHYSICS_PROCESS) {
-	}
-
-	if (p_what == NOTIFICATION_READY) {
+	} else if (p_what == NOTIFICATION_READY) {
 
 		//get_scene()->connect("node_removed",this,"_node_removed");
 
@@ -64,9 +62,7 @@ void MeshEditor::_notification(int p_what) {
 			light_2_switch->set_pressed_texture(get_icon("MaterialPreviewLight2Off", "EditorIcons"));
 			first_enter = false;
 		}
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		Ref<Texture> checkerboard = get_icon("Checkerboard", "EditorIcons");
 		Size2 size = get_size();

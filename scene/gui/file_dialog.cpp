@@ -49,9 +49,7 @@ void FileDialog::_notification(int p_what) {
 
 		refresh->set_icon(get_icon("reload"));
 		dir_up->set_icon(get_icon("parent_folder"));
-	}
-
-	if (p_what == NOTIFICATION_POPUP_HIDE) {
+	} else if (p_what == NOTIFICATION_POPUP_HIDE) {
 
 		set_process_unhandled_input(false);
 	}

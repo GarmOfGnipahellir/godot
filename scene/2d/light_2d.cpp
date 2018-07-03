@@ -318,18 +318,13 @@ void Light2D::_notification(int p_what) {
 
 		VS::get_singleton()->canvas_light_attach_to_canvas(canvas_light, get_canvas());
 		_update_light_visibility();
-	}
-
-	if (p_what == NOTIFICATION_TRANSFORM_CHANGED) {
+	} else if (p_what == NOTIFICATION_TRANSFORM_CHANGED) {
 
 		VS::get_singleton()->canvas_light_set_transform(canvas_light, get_global_transform());
-	}
-	if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
+	} else if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
 
 		_update_light_visibility();
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		VS::get_singleton()->canvas_light_attach_to_canvas(canvas_light, RID());
 		_update_light_visibility();

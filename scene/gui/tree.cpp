@@ -2807,40 +2807,32 @@ void Tree::_notification(int p_what) {
 	if (p_what == NOTIFICATION_FOCUS_ENTER) {
 
 		focus_in_id = get_tree()->get_event_count();
-	}
-	if (p_what == NOTIFICATION_MOUSE_EXIT) {
+	} else if (p_what == NOTIFICATION_MOUSE_EXIT) {
 
 		if (cache.hover_type != Cache::CLICK_NONE) {
 			cache.hover_type = Cache::CLICK_NONE;
 			update();
 		}
-	}
-
-	if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
+	} else if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
 
 		drag_touching = false;
-	}
-
-	if (p_what == NOTIFICATION_ENTER_TREE) {
+	} else if (p_what == NOTIFICATION_ENTER_TREE) {
 
 		update_cache();
-	}
-	if (p_what == NOTIFICATION_DRAG_END) {
+	} else if (p_what == NOTIFICATION_DRAG_END) {
 
 		drop_mode_flags = 0;
 		scrolling = false;
 		set_physics_process_internal(false);
 		update();
-	}
-	if (p_what == NOTIFICATION_DRAG_BEGIN) {
+	} else if (p_what == NOTIFICATION_DRAG_BEGIN) {
 
 		single_select_defer = NULL;
 		if (cache.scroll_speed > 0 && get_rect().has_point(get_viewport()->get_mouse_position() - get_global_position())) {
 			scrolling = true;
 			set_physics_process_internal(true);
 		}
-	}
-	if (p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS) {
+	} else if (p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS) {
 
 		if (drag_touching) {
 
@@ -2903,9 +2895,7 @@ void Tree::_notification(int p_what) {
 			h_scroll->set_value(point.x);
 			v_scroll->set_value(point.y);
 		}
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		update_cache();
 		update_scrollbars();
@@ -2958,9 +2948,7 @@ void Tree::_notification(int p_what) {
 				f->draw_halign(ci, tbrect.position + Point2i(sb->get_offset().x, (tbrect.size.height - f->get_height()) / 2 + f->get_ascent()), HALIGN_CENTER, clip_w, columns[i].title, cache.title_button_color);
 			}
 		}
-	}
-
-	if (p_what == NOTIFICATION_THEME_CHANGED) {
+	} else if (p_what == NOTIFICATION_THEME_CHANGED) {
 		update_cache();
 	}
 }

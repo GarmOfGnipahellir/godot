@@ -770,9 +770,7 @@ void ItemList::_notification(int p_what) {
 	if (p_what == NOTIFICATION_RESIZED) {
 		shape_changed = true;
 		update();
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		Ref<StyleBox> bg = get_stylebox("bg");
 

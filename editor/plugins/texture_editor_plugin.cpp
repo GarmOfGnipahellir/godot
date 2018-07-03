@@ -40,14 +40,10 @@ void TextureEditor::_gui_input(Ref<InputEvent> p_event) {
 void TextureEditor::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_PHYSICS_PROCESS) {
-	}
-
-	if (p_what == NOTIFICATION_READY) {
+	} else if (p_what == NOTIFICATION_READY) {
 
 		//get_scene()->connect("node_removed",this,"_node_removed");
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		Ref<Texture> checkerboard = get_icon("Checkerboard", "EditorIcons");
 		Size2 size = get_size();

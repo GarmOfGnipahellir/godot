@@ -92,8 +92,7 @@ void VehicleWheel::_notification(int p_what) {
 		m_chassisConnectionPointCS = get_transform().origin;
 		m_wheelDirectionCS = -get_transform().basis.get_axis(Vector3::AXIS_Y).normalized();
 		m_wheelAxleCS = get_transform().basis.get_axis(Vector3::AXIS_X).normalized();
-	}
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		VehicleBody *cb = Object::cast_to<VehicleBody>(get_parent());
 		if (!cb)

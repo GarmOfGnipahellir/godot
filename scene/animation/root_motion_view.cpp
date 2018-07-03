@@ -51,9 +51,7 @@ void RootMotionView::_notification(int p_what) {
 
 		VS::get_singleton()->immediate_set_material(immediate, SpatialMaterial::get_material_rid_for_2d(false, true, false, false, false));
 		first = true;
-	}
-
-	if (p_what == NOTIFICATION_INTERNAL_PROCESS || p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS) {
+	} else if (p_what == NOTIFICATION_INTERNAL_PROCESS || p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS) {
 		Transform transform;
 
 		if (has_node(path)) {

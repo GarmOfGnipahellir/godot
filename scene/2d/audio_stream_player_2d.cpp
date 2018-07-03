@@ -135,14 +135,10 @@ void AudioStreamPlayer2D::_notification(int p_what) {
 		if (autoplay && !Engine::get_singleton()->is_editor_hint()) {
 			play();
 		}
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		AudioServer::get_singleton()->remove_callback(_mix_audios, this);
-	}
-
-	if (p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS) {
+	} else if (p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS) {
 
 		//update anything related to position first, if possible of course
 

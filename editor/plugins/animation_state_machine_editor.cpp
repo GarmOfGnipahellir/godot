@@ -850,9 +850,7 @@ void AnimationNodeStateMachineEditor::_notification(int p_what) {
 		play_mode->clear();
 		play_mode->add_icon_item(get_icon("PlayTravel", "EditorIcons"), TTR("Travel"));
 		play_mode->add_icon_item(get_icon("Play", "EditorIcons"), TTR("Immediate"));
-	}
-
-	if (p_what == NOTIFICATION_PROCESS) {
+	} else if (p_what == NOTIFICATION_PROCESS) {
 
 		String error;
 
@@ -943,9 +941,7 @@ void AnimationNodeStateMachineEditor::_notification(int p_what) {
 			last_play_pos = state_machine->get_current_play_pos();
 			state_machine_play_pos->update();
 		}
-	}
-
-	if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
+	} else if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
 		over_node = StringName();
 	}
 }

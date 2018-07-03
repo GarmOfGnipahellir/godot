@@ -40,19 +40,13 @@ void ResourcePreloaderEditor::_gui_input(Ref<InputEvent> p_event) {
 void ResourcePreloaderEditor::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_PHYSICS_PROCESS) {
-	}
-
-	if (p_what == NOTIFICATION_ENTER_TREE) {
+	} else if (p_what == NOTIFICATION_ENTER_TREE) {
 		load->set_icon(get_icon("Folder", "EditorIcons"));
 		_delete->set_icon(get_icon("Remove", "EditorIcons"));
-	}
-
-	if (p_what == NOTIFICATION_READY) {
+	} else if (p_what == NOTIFICATION_READY) {
 
 		//NodePath("/root")->connect("node_removed", this,"_node_removed",Vector<Variant>(),true);
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 	}
 }
 

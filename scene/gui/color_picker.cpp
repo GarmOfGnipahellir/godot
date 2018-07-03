@@ -703,9 +703,7 @@ void ColorPickerButton::_notification(int p_what) {
 		Rect2 r = Rect2(normal->get_offset(), get_size() - normal->get_minimum_size());
 		draw_texture_rect(Control::get_icon("bg", "ColorPickerButton"), r, true);
 		draw_rect(r, color);
-	}
-
-	if (p_what == MainLoop::NOTIFICATION_WM_QUIT_REQUEST && popup) {
+	} else if (p_what == MainLoop::NOTIFICATION_WM_QUIT_REQUEST && popup) {
 		popup->hide();
 	}
 }

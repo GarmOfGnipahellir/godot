@@ -71,9 +71,7 @@ void Label::_notification(int p_what) {
 
 		regenerate_word_cache();
 		update();
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		if (clip || autowrap) {
 			VisualServer::get_singleton()->canvas_item_set_clip(get_canvas_item(), true);
@@ -278,14 +276,11 @@ void Label::_notification(int p_what) {
 			wc = to ? to->next : 0;
 			line++;
 		}
-	}
-
-	if (p_what == NOTIFICATION_THEME_CHANGED) {
+	} else if (p_what == NOTIFICATION_THEME_CHANGED) {
 
 		word_cache_dirty = true;
 		update();
-	}
-	if (p_what == NOTIFICATION_RESIZED) {
+	} else if (p_what == NOTIFICATION_RESIZED) {
 
 		word_cache_dirty = true;
 	}

@@ -2121,14 +2121,10 @@ void SpatialEditorViewport::_notification(int p_what) {
 			_update_camera(0);
 
 		call_deferred("update_transform_gizmo_view");
-	}
-
-	if (p_what == NOTIFICATION_RESIZED) {
+	} else if (p_what == NOTIFICATION_RESIZED) {
 
 		call_deferred("update_transform_gizmo_view");
-	}
-
-	if (p_what == NOTIFICATION_PROCESS) {
+	} else if (p_what == NOTIFICATION_PROCESS) {
 
 		real_t delta = get_process_delta_time();
 
@@ -2246,9 +2242,7 @@ void SpatialEditorViewport::_notification(int p_what) {
 			text += TTR("FPS") + ": " + itos(temp_fps) + " (" + String::num(1000.0f / temp_fps, 2) + " ms)";
 			fps_label->set_text(text);
 		}
-	}
-
-	if (p_what == NOTIFICATION_ENTER_TREE) {
+	} else if (p_what == NOTIFICATION_ENTER_TREE) {
 
 		surface->connect("draw", this, "_draw");
 		surface->connect("gui_input", this, "_sinput");
@@ -2260,16 +2254,11 @@ void SpatialEditorViewport::_notification(int p_what) {
 		fps_label->add_style_override("normal", editor->get_gui_base()->get_stylebox("Information3dViewport", "EditorStyles"));
 		preview_camera->set_icon(get_icon("Camera", "EditorIcons"));
 		_init_gizmo_instance(index);
-	}
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		_finish_gizmo_instances();
-	}
-
-	if (p_what == NOTIFICATION_MOUSE_ENTER) {
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_MOUSE_ENTER) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 	}
 }
 

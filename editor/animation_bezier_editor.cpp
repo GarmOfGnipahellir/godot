@@ -191,8 +191,7 @@ void AnimationBezierTrackEdit::_notification(int p_what) {
 			handle_mode_option->add_icon_item(get_icon("BezierHandlesBalanced", "EditorIcons"), TTR("Balanced"), HANDLE_MODE_BALANCED);
 			handle_mode_option->add_icon_item(get_icon("BezierHandlesMirror", "EditorIcons"), TTR("Mirror"), HANDLE_MODE_MIRROR);
 		}
-	}
-	if (p_what == NOTIFICATION_RESIZED) {
+	} else if (p_what == NOTIFICATION_RESIZED) {
 
 		int right_limit = get_size().width - timeline->get_buttons_width();
 		int hsep = get_constant("hseparation", "ItemList");
@@ -200,8 +199,7 @@ void AnimationBezierTrackEdit::_notification(int p_what) {
 
 		handle_mode_option->set_position(Vector2(right_limit + hsep, get_size().height - handle_mode_option->get_combined_minimum_size().height - vsep));
 		handle_mode_option->set_size(Vector2(timeline->get_buttons_width() - hsep * 2, handle_mode_option->get_combined_minimum_size().height));
-	}
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 		if (animation.is_null())
 			return;
 

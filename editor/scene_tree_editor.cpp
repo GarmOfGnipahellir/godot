@@ -564,16 +564,14 @@ void SceneTreeEditor::_notification(int p_what) {
 		//get_scene()->connect("tree_changed",this,"_tree_changed",Vector<Variant>(),CONNECT_DEFERRED);
 		//get_scene()->connect("node_removed",this,"_node_removed",Vector<Variant>(),CONNECT_DEFERRED);
 		_update_tree();
-	}
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		get_tree()->disconnect("tree_changed", this, "_tree_changed");
 		get_tree()->disconnect("node_removed", this, "_node_removed");
 		tree->disconnect("item_collapsed", this, "_cell_collapsed");
 		get_tree()->disconnect("node_configuration_warning_changed", this, "_warning_changed");
 		EditorSettings::get_singleton()->disconnect("settings_changed", this, "_editor_settings_changed");
-	}
-	if (p_what == NOTIFICATION_THEME_CHANGED) {
+	} else if (p_what == NOTIFICATION_THEME_CHANGED) {
 
 		_update_tree();
 	}

@@ -229,9 +229,7 @@ void ScrollContainer::_notification(int p_what) {
 	if (p_what == NOTIFICATION_ENTER_TREE || p_what == NOTIFICATION_THEME_CHANGED) {
 
 		call_deferred("_update_scrollbar_position");
-	};
-
-	if (p_what == NOTIFICATION_SORT_CHILDREN) {
+	} else if (p_what == NOTIFICATION_SORT_CHILDREN) {
 
 		child_max_size = Size2(0, 0);
 		Size2 size = get_size();
@@ -280,17 +278,13 @@ void ScrollContainer::_notification(int p_what) {
 			fit_child_in_rect(c, r);
 		}
 		update();
-	};
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		Ref<StyleBox> sb = get_stylebox("bg");
 		draw_style_box(sb, Rect2(Vector2(), get_size()));
 
 		update_scrollbars();
-	}
-
-	if (p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS) {
+	} else if (p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS) {
 
 		if (drag_touching) {
 

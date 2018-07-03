@@ -877,7 +877,7 @@ void AnimationTree::_process_graph(float p_delta) {
 								continue;
 
 							t->loc = t->loc.linear_interpolate(loc, blend);
-							if (t->rot_blend_accum==0) {
+							if (t->rot_blend_accum == 0) {
 								t->rot = rot;
 								t->rot_blend_accum = blend;
 							} else {
@@ -1052,7 +1052,7 @@ void AnimationTree::_process_graph(float p_delta) {
 									float len = t->start > time ? (a->get_length() - t->start) + time : time - t->start;
 
 									if (len > t->len) {
-										stop=true;
+										stop = true;
 									}
 								}
 
@@ -1065,7 +1065,7 @@ void AnimationTree::_process_graph(float p_delta) {
 							}
 						}
 
-						float db = Math::linear2db(MAX(blend,0.00001));
+						float db = Math::linear2db(MAX(blend, 0.00001));
 						if (t->object->has_method("set_unit_db")) {
 							t->object->call("set_unit_db", db);
 						} else {
@@ -1203,13 +1203,9 @@ void AnimationTree::_notification(int p_what) {
 
 	if (active && p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS && process_mode == ANIMATION_PROCESS_PHYSICS) {
 		_process_graph(get_physics_process_delta_time());
-	}
-
-	if (active && p_what == NOTIFICATION_INTERNAL_PROCESS && process_mode == ANIMATION_PROCESS_IDLE) {
+	} else if (active && p_what == NOTIFICATION_INTERNAL_PROCESS && process_mode == ANIMATION_PROCESS_IDLE) {
 		_process_graph(get_process_delta_time());
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 		_clear_caches();
 	}
 }
@@ -1310,12 +1306,10 @@ void AnimationTree::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("get_root_motion_transform"), &AnimationTree::get_root_motion_transform);
 
-
-
 	ClassDB::bind_method(D_METHOD("_node_removed"), &AnimationTree::_node_removed);
 
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "tree_root", PROPERTY_HINT_RESOURCE_TYPE, "AnimationRootNode", PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_DO_NOT_SHARE_ON_DUPLICATE), "set_tree_root", "get_tree_root");
-	ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "anim_player",PROPERTY_HINT_NODE_PATH_VALID_TYPES,"AnimationPlayer"), "set_animation_player", "get_animation_player");
+	ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "anim_player", PROPERTY_HINT_NODE_PATH_VALID_TYPES, "AnimationPlayer"), "set_animation_player", "get_animation_player");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "active"), "set_active", "is_active");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "process_mode", PROPERTY_HINT_ENUM, "Physics,Idle"), "set_process_mode", "get_process_mode");
 	ADD_GROUP("Root Motion", "root_motion_");

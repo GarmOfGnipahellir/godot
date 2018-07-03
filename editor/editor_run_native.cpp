@@ -62,9 +62,7 @@ void EditorRunNative::_notification(int p_what) {
 				}
 			}
 		}
-	}
-
-	if (p_what == NOTIFICATION_PROCESS) {
+	} else if (p_what == NOTIFICATION_PROCESS) {
 
 		bool changed = EditorExport::get_singleton()->poll_export_platforms() || first;
 

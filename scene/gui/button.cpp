@@ -67,9 +67,7 @@ void Button::_notification(int p_what) {
 		xl_text = tr(text);
 		minimum_size_changed();
 		update();
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		RID ci = get_canvas_item();
 		Size2 size = get_size();

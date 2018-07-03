@@ -286,8 +286,7 @@ void GraphEdit::_notification(int p_what) {
 		zoom_reset->set_icon(get_icon("reset"));
 		zoom_plus->set_icon(get_icon("more"));
 		snap_button->set_icon(get_icon("snap"));
-	}
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		draw_style_box(get_stylebox("bg"), Rect2(Point2(), get_size()));
 
@@ -331,9 +330,7 @@ void GraphEdit::_notification(int p_what) {
 				draw_line(Vector2(0, base_ofs), Vector2(get_size().width, base_ofs), color);
 			}
 		}
-	}
-
-	if (p_what == NOTIFICATION_RESIZED) {
+	} else if (p_what == NOTIFICATION_RESIZED) {
 		_update_scroll();
 		top_layer->update();
 	}

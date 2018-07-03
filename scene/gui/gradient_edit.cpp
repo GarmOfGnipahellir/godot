@@ -278,8 +278,7 @@ void GradientEdit::_notification(int p_what) {
 		if (!picker->is_connected("color_changed", this, "_color_changed")) {
 			picker->connect("color_changed", this, "_color_changed");
 		}
-	}
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		int w = get_size().x;
 		int h = get_size().y;
@@ -367,9 +366,7 @@ void GradientEdit::_notification(int p_what) {
 			draw_line(Vector2(total_w + 1, h + 1), Vector2(-1, h + 1), Color(1, 1, 1, 0.6));
 			draw_line(Vector2(-1, -1), Vector2(-1, h + 1), Color(1, 1, 1, 0.6));
 		}
-	}
-
-	if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
+	} else if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
 
 		if (!is_visible()) {
 			grabbing = false;

@@ -708,13 +708,10 @@ void AnimationTimelineEdit::_notification(int p_what) {
 		add_track->get_popup()->add_icon_item(get_icon("KeyBezier", "EditorIcons"), TTR("Bezier Curve Track"));
 		add_track->get_popup()->add_icon_item(get_icon("KeyAudio", "EditorIcons"), TTR("Audio Playback Track"));
 		add_track->get_popup()->add_icon_item(get_icon("KeyAnimation", "EditorIcons"), TTR("Animation Playback Track"));
-	}
-
-	if (p_what == NOTIFICATION_RESIZED) {
+	} else if (p_what == NOTIFICATION_RESIZED) {
 		len_hb->set_position(Vector2(get_size().width - get_buttons_width(), 0));
 		len_hb->set_size(Size2(get_buttons_width(), get_size().height));
-	}
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		int key_range = get_size().width - get_buttons_width() - get_name_limit();
 
@@ -3422,13 +3419,9 @@ void AnimationTrackEditor::_notification(int p_what) {
 		view_group->set_icon(get_icon(view_group->is_pressed() ? "AnimationTrackList" : "AnimationTrackGroup", "EditorIcons"));
 		selected_filter->set_icon(get_icon("AnimationFilter", "EditorIcons"));
 		main_panel->add_style_override("panel", get_stylebox("bg", "Tree"));
-	}
-
-	if (p_what == NOTIFICATION_READY) {
+	} else if (p_what == NOTIFICATION_READY) {
 		EditorNode::get_singleton()->get_editor_selection()->connect("selection_changed", this, "_selection_changed");
-	}
-
-	if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
+	} else if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
 
 		update_keying();
 		EditorNode::get_singleton()->update_keying();

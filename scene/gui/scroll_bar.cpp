@@ -298,9 +298,7 @@ void ScrollBar::_notification(int p_what) {
 		}
 
 		grabber->draw(ci, grabber_rect);
-	}
-
-	if (p_what == NOTIFICATION_ENTER_TREE) {
+	} else if (p_what == NOTIFICATION_ENTER_TREE) {
 
 		if (has_node(drag_slave_path)) {
 			Node *n = get_node(drag_slave_path);
@@ -311,8 +309,7 @@ void ScrollBar::_notification(int p_what) {
 			drag_slave->connect("gui_input", this, "_drag_slave_input");
 			drag_slave->connect("tree_exiting", this, "_drag_slave_exit", varray(), CONNECT_ONESHOT);
 		}
-	}
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		if (drag_slave) {
 			drag_slave->disconnect("gui_input", this, "_drag_slave_input");
@@ -320,9 +317,7 @@ void ScrollBar::_notification(int p_what) {
 		}
 
 		drag_slave = NULL;
-	}
-
-	if (p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS) {
+	} else if (p_what == NOTIFICATION_INTERNAL_PHYSICS_PROCESS) {
 
 		if (scrolling) {
 			if (get_value() != target_scroll) {
@@ -414,9 +409,7 @@ void ScrollBar::_notification(int p_what) {
 				time_since_motion += get_physics_process_delta_time();
 			}
 		}
-	}
-
-	if (p_what == NOTIFICATION_MOUSE_EXIT) {
+	} else if (p_what == NOTIFICATION_MOUSE_EXIT) {
 
 		highlight = HIGHLIGHT_NONE;
 		update();

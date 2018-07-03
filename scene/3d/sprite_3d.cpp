@@ -75,9 +75,7 @@ void SpriteBase3D::_notification(int p_what) {
 		if (parent_sprite) {
 			pI = parent_sprite->children.push_back(this);
 		}
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 
 		if (parent_sprite) {
 

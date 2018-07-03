@@ -434,9 +434,7 @@ void HTTPRequest::_notification(int p_what) {
 			set_process_internal(false);
 			// cancel_request(); called from _request done now
 		}
-	}
-
-	if (p_what == NOTIFICATION_EXIT_TREE) {
+	} else if (p_what == NOTIFICATION_EXIT_TREE) {
 		if (requesting) {
 			cancel_request();
 		}

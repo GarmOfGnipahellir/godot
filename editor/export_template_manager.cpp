@@ -491,9 +491,7 @@ void ExportTemplateManager::_notification(int p_what) {
 			set_process(false);
 			;
 		}
-	}
-
-	if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
+	} else if (p_what == NOTIFICATION_VISIBILITY_CHANGED) {
 		if (!is_visible_in_tree()) {
 			print_line("closed");
 			download_templates->cancel_request();

@@ -166,9 +166,7 @@ void EditorSpinSlider::_notification(int p_what) {
 			grabbing_spinner = false;
 			grabbing_spinner_attempt = false;
 		}
-	}
-
-	if (p_what == NOTIFICATION_DRAW) {
+	} else if (p_what == NOTIFICATION_DRAW) {
 
 		updown_offset = -1;
 
@@ -251,14 +249,11 @@ void EditorSpinSlider::_notification(int p_what) {
 				grabber_range = width;
 			}
 		}
-	}
-
-	if (p_what == NOTIFICATION_MOUSE_ENTER) {
+	} else if (p_what == NOTIFICATION_MOUSE_ENTER) {
 
 		mouse_over_spin = true;
 		update();
-	}
-	if (p_what == NOTIFICATION_MOUSE_EXIT) {
+	} else if (p_what == NOTIFICATION_MOUSE_EXIT) {
 
 		mouse_over_spin = false;
 		update();
