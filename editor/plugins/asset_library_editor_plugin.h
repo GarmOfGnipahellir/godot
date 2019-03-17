@@ -51,16 +51,29 @@
 #include "editor_asset_installer.h"
 #include "scene/main/http_request.h"
 
-class EditorAssetLibraryItem : public PanelContainer {
+class EditorAssetLibraryItem : public Button {
 
-	GDCLASS(EditorAssetLibraryItem, PanelContainer);
+	GDCLASS(EditorAssetLibraryItem, Button);
 
-	TextureButton *icon;
-	LinkButton *title;
-	LinkButton *category;
+	TextureRect *icon;
+	HBoxContainer *title_hb;
+	Label *title;
+	Label *version;
+	HBoxContainer *author_hb;
+	Label *submitted;
 	LinkButton *author;
-	TextureRect *stars[5];
-	Label *price;
+	HBoxContainer *license_hb;
+	TextureRect *license_icon;
+	Label *license;
+
+	HBoxContainer *bottom_hb;
+	TextureRect *repo_icon;
+	LinkButton *repo;
+	Button *category;
+	Button *engine_version;
+	Button *channel;
+
+	Ref<StyleBoxFlat> button_style;
 
 	int asset_id;
 	int category_id;
@@ -69,6 +82,7 @@ class EditorAssetLibraryItem : public PanelContainer {
 	void _asset_clicked();
 	void _category_clicked();
 	void _author_clicked();
+	void _url_clicked();
 
 	void set_image(int p_type, int p_index, const Ref<Texture> &p_image);
 
@@ -77,21 +91,20 @@ protected:
 	static void _bind_methods();
 
 public:
-	void configure(const String &p_title, int p_asset_id, const String &p_category, int p_category_id, const String &p_author, int p_author_id, int p_rating, const String &p_cost);
+	void configure(const String &p_title, const String &p_version_string, int p_asset_id, const String &p_category, int p_category_id, const String &p_author, int p_author_id, int p_rating, const String &p_cost);
 
 	EditorAssetLibraryItem();
 };
 
-class EditorAssetLibraryItemDescription : public ConfirmationDialog {
+class EditorAssetLibraryItemDescription : public PanelContainer {
 
-	GDCLASS(EditorAssetLibraryItemDescription, ConfirmationDialog);
+	GDCLASS(EditorAssetLibraryItemDescription, PanelContainer);
 
-	EditorAssetLibraryItem *item;
+	ScrollContainer *desc_scroll;
 	RichTextLabel *description;
 	ScrollContainer *previews;
 	HBoxContainer *preview_hb;
 	PanelContainer *previews_bg;
-	PanelContainer *desc_bg;
 
 	struct Preview {
 		int id;
@@ -109,6 +122,7 @@ class EditorAssetLibraryItemDescription : public ConfirmationDialog {
 	int asset_id;
 	String download_url;
 	String title;
+	String version;
 	String sha256;
 	Ref<Texture> icon;
 
@@ -124,6 +138,7 @@ public:
 	void add_preview(int p_id, bool p_video, const String &p_url);
 
 	String get_title() { return title; }
+	String get_version() { return version; }
 	Ref<Texture> get_preview_icon() { return icon; }
 	String get_download_url() { return download_url; }
 	int get_asset_id() { return asset_id; }
@@ -183,6 +198,12 @@ class EditorAssetLibrary : public PanelContainer {
 	void _asset_open();
 	void _asset_file_selected(const String &p_file);
 
+	HSplitContainer *splitter;
+
+	// left side
+
+	VBoxContainer *page_vb;
+	PanelContainer *top_box;
 	PanelContainer *library_scroll_bg;
 	ScrollContainer *library_scroll;
 	VBoxContainer *library_vb;
@@ -198,11 +219,13 @@ class EditorAssetLibrary : public PanelContainer {
 	Label *error_label;
 	MenuButton *support;
 
-	HBoxContainer *contents;
+	// right side
+
+	VBoxContainer *item_container;
+	ScrollContainer *item_scroll;
 
 	HBoxContainer *asset_top_page;
 	GridContainer *asset_items;
-	HBoxContainer *asset_bottom_page;
 
 	HTTPRequest *request;
 

@@ -35,22 +35,20 @@
 #include "editor_node.h"
 #include "editor_settings.h"
 
-void EditorAssetLibraryItem::configure(const String &p_title, int p_asset_id, const String &p_category, int p_category_id, const String &p_author, int p_author_id, int p_rating, const String &p_cost) {
+void EditorAssetLibraryItem::configure(const String &p_title, const String &p_version_string, int p_asset_id, const String &p_category, int p_category_id, const String &p_author, int p_author_id, int p_rating, const String &p_cost) {
 
 	title->set_text(p_title);
+	String vs = p_version_string;
+	if (p_version_string.begins_with("v"))
+		vs = p_version_string.right(1); // cut-off double v in some assets
+	version->set_text("v" + vs);
 	asset_id = p_asset_id;
 	category->set_text(p_category);
 	category_id = p_category_id;
 	author->set_text(p_author);
 	author_id = p_author_id;
-	price->set_text(p_cost);
-
-	for (int i = 0; i < 5; i++) {
-		if (i < p_rating)
-			stars[i]->set_texture(get_icon("Favorites", "EditorIcons"));
-		else
-			stars[i]->set_texture(get_icon("NonFavorite", "EditorIcons"));
-	}
+	license->set_text(p_cost);
+	repo->set_text(p_author + "/");
 }
 
 void EditorAssetLibraryItem::set_image(int p_type, int p_index, const Ref<Texture> &p_image) {
@@ -58,16 +56,39 @@ void EditorAssetLibraryItem::set_image(int p_type, int p_index, const Ref<Textur
 	ERR_FAIL_COND(p_type != EditorAssetLibrary::IMAGE_QUEUE_ICON);
 	ERR_FAIL_COND(p_index != 0);
 
-	icon->set_normal_texture(p_image);
+	icon->set_texture(p_image);
 }
 
 void EditorAssetLibraryItem::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_ENTER_TREE) {
+		connect("pressed", this, "_asset_clicked");
+	}
+	if (p_what == NOTIFICATION_ENTER_TREE || p_what == NOTIFICATION_THEME_CHANGED) {
+		if (is_visible_in_tree()) {
 
-		icon->set_normal_texture(get_icon("DefaultProjectIcon", "EditorIcons"));
-		category->add_color_override("font_color", Color(0.5, 0.5, 0.5));
-		author->add_color_override("font_color", Color(0.5, 0.5, 0.5));
+			icon->set_texture(EditorNode::get_singleton()->get_gui_base()->get_icon("DefaultProjectIcon", "EditorIcons"));
+			license_icon->set_texture(EditorNode::get_singleton()->get_gui_base()->get_icon("Law", "EditorIcons"));
+			repo_icon->set_texture(EditorNode::get_singleton()->get_gui_base()->get_icon("MarkGithub", "EditorIcons"));
+
+			category->add_style_override("normal", get_stylebox("blue_button"));
+			category->add_style_override("hover", get_stylebox("blue_button"));
+			category->add_style_override("pressed", get_stylebox("blue_button"));
+			category->add_color_override("font_color", Color(1.0, 1.0, 1.0));
+
+			engine_version->add_style_override("normal", get_stylebox("red_button"));
+			engine_version->add_style_override("hover", get_stylebox("red_button"));
+			engine_version->add_style_override("pressed", get_stylebox("red_button"));
+			engine_version->add_color_override("font_color", Color(1.0, 1.0, 1.0));
+
+			channel->add_style_override("normal", get_stylebox("green_button"));
+			channel->add_style_override("hover", get_stylebox("green_button"));
+			channel->add_style_override("pressed", get_stylebox("green_button"));
+			channel->add_color_override("font_color", Color(1.0, 1.0, 1.0));
+
+			author->add_color_override("font_color", Color(0.5, 0.5, 0.5));
+			repo->add_color_override("font_color", Color(0.5, 0.5, 0.5));
+		}
 	}
 }
 
@@ -80,9 +101,15 @@ void EditorAssetLibraryItem::_category_clicked() {
 
 	emit_signal("category_selected", category_id);
 }
+
 void EditorAssetLibraryItem::_author_clicked() {
 
 	emit_signal("author_selected", author_id);
+}
+
+void EditorAssetLibraryItem::_url_clicked() {
+	String url = repo->get_text();
+	OS::get_singleton()->shell_open("https://github.com/" + url);
 }
 
 void EditorAssetLibraryItem::_bind_methods() {
@@ -91,69 +118,161 @@ void EditorAssetLibraryItem::_bind_methods() {
 	ClassDB::bind_method("_asset_clicked", &EditorAssetLibraryItem::_asset_clicked);
 	ClassDB::bind_method("_category_clicked", &EditorAssetLibraryItem::_category_clicked);
 	ClassDB::bind_method("_author_clicked", &EditorAssetLibraryItem::_author_clicked);
+	ClassDB::bind_method("_url_clicked", &EditorAssetLibraryItem::_url_clicked);
 	ADD_SIGNAL(MethodInfo("asset_selected"));
 	ADD_SIGNAL(MethodInfo("category_selected"));
 	ADD_SIGNAL(MethodInfo("author_selected"));
 }
 
 EditorAssetLibraryItem::EditorAssetLibraryItem() {
+	button_style.instance();
+	button_style->set_default_margin(MARGIN_LEFT, 5);
+	button_style->set_default_margin(MARGIN_RIGHT, 5);
+	button_style->set_default_margin(MARGIN_BOTTOM, 5);
+	button_style->set_default_margin(MARGIN_TOP, 5);
+	button_style->set_corner_radius_all(5);
+	button_style->set_bg_color(Color(0.5, 0.5, 0.5, 0.15));
+	add_style_override("normal", button_style);
+	button_style->set_bg_color(Color(1.0, 1.0, 1.0, 0.15));
+	add_style_override("hover", button_style);
+	add_style_override("focus", button_style);
+	add_style_override("pressed", button_style);
 
-	Ref<StyleBoxEmpty> border;
-	border.instance();
-	border->set_default_margin(MARGIN_LEFT, 5);
-	border->set_default_margin(MARGIN_RIGHT, 5);
-	border->set_default_margin(MARGIN_BOTTOM, 5);
-	border->set_default_margin(MARGIN_TOP, 5);
-	add_style_override("panel", border);
+	Ref<StyleBoxFlat> blue_button;
+	blue_button.instance();
+	blue_button->set_bg_color(Color(0.14, 0.41, 0.81));
+	add_style_override("blue_button", blue_button);
+
+	Ref<StyleBoxFlat> red_button;
+	red_button.instance();
+	red_button->set_bg_color(Color(0.65, 0.13, 0.34));
+	add_style_override("red_button", red_button);
+
+	Ref<StyleBoxFlat> green_button;
+	green_button.instance();
+	green_button->set_bg_color(Color(0.04, 0.52, 0.48));
+	add_style_override("green_button", green_button);
+
+	VBoxContainer *vb_main = memnew(VBoxContainer);
+	add_child(vb_main);
+	vb_main->set_margin(MARGIN_LEFT, 16 * EDSCALE);
+	vb_main->set_margin(MARGIN_TOP, 16 * EDSCALE);
+	vb_main->set_margin(MARGIN_RIGHT, 16 * EDSCALE);
+	vb_main->set_margin(MARGIN_BOTTOM, 16 * EDSCALE);
+	vb_main->set_h_size_flags(SIZE_EXPAND_FILL);
 
 	HBoxContainer *hb = memnew(HBoxContainer);
-	add_child(hb);
+	vb_main->add_child(hb);
+	hb->set_h_size_flags(SIZE_EXPAND_FILL);
+	hb->set_v_size_flags(SIZE_EXPAND_FILL);
 
-	icon = memnew(TextureButton);
-	icon->set_custom_minimum_size(Size2(64, 64));
-	icon->set_default_cursor_shape(CURSOR_POINTING_HAND);
-	icon->connect("pressed", this, "_asset_clicked");
-
+	icon = memnew(TextureRect);
 	hb->add_child(icon);
+	icon->set_expand(true);
+	icon->set_stretch_mode(TextureRect::STRETCH_SCALE);
+	icon->set_custom_minimum_size(Size2(80 * EDSCALE, 80 * EDSCALE));
 
 	VBoxContainer *vb = memnew(VBoxContainer);
-
 	hb->add_child(vb);
 	vb->set_h_size_flags(SIZE_EXPAND_FILL);
+	vb->set_v_size_flags(SIZE_FILL);
 
-	title = memnew(LinkButton);
-	title->set_text("My Awesome Addon");
-	title->set_underline_mode(LinkButton::UNDERLINE_MODE_ON_HOVER);
-	title->connect("pressed", this, "_asset_clicked");
-	vb->add_child(title);
+	title_hb = memnew(HBoxContainer);
+	vb->add_child(title_hb);
+	title_hb->set_h_size_flags(SIZE_EXPAND_FILL);
+	title_hb->set_v_size_flags(SIZE_EXPAND_FILL);
 
-	category = memnew(LinkButton);
-	category->set_text("Editor Tools");
-	category->set_underline_mode(LinkButton::UNDERLINE_MODE_ON_HOVER);
-	category->connect("pressed", this, "_category_clicked");
-	vb->add_child(category);
+	title = memnew(Label);
+	title_hb->add_child(title);
+	title->set_text("");
+
+	version = memnew(Label);
+	title_hb->add_child(version);
+	version->set_text("");
+
+	author_hb = memnew(HBoxContainer);
+	vb->add_child(author_hb);
+	author_hb->set_custom_minimum_size(Size2(0, 0));
+	author_hb->set_h_size_flags(SIZE_EXPAND_FILL);
+	author_hb->set_v_size_flags(SIZE_FILL);
+
+	submitted = memnew(Label);
+	author_hb->add_child(submitted);
+	submitted->set_text(TTR("Submitted by"));
 
 	author = memnew(LinkButton);
-	author->set_text("Johny Tolengo");
+	author_hb->add_child(author);
+	author->set_text("");
 	author->set_underline_mode(LinkButton::UNDERLINE_MODE_ON_HOVER);
 	author->connect("pressed", this, "_author_clicked");
-	vb->add_child(author);
 
-	HBoxContainer *rating_hb = memnew(HBoxContainer);
-	vb->add_child(rating_hb);
+	HBoxContainer *license_hb = memnew(HBoxContainer);
+	vb->add_child(license_hb);
+	license_hb->set_custom_minimum_size(Size2(0, 0));
+	license_hb->set_h_size_flags(SIZE_EXPAND_FILL);
+	license_hb->set_v_size_flags(SIZE_FILL);
 
-	for (int i = 0; i < 5; i++) {
-		stars[i] = memnew(TextureRect);
-		rating_hb->add_child(stars[i]);
-	}
-	price = memnew(Label);
-	price->set_text(TTR("Free"));
-	vb->add_child(price);
+	license_icon = memnew(TextureRect);
+	license_hb->add_child(license_icon);
+	license_icon->set_expand(true);
+	license_icon->set_stretch_mode(TextureRect::STRETCH_KEEP_ASPECT_CENTERED);
+	license_icon->set_custom_minimum_size(Size2(48 * EDSCALE, 32 * EDSCALE));
+	license_icon->set_v_size_flags(SIZE_EXPAND_FILL);
 
-	set_custom_minimum_size(Size2(250, 100));
+	license = memnew(Label);
+	license_hb->add_child(license);
+	license->set_text("");
+
+	bottom_hb = memnew(HBoxContainer);
+	vb_main->add_child(bottom_hb);
+	bottom_hb->set_h_size_flags(SIZE_EXPAND_FILL);
+	bottom_hb->set_custom_minimum_size(Size2(600, 0));
+
+	repo_icon = memnew(TextureRect);
+	repo = memnew(LinkButton);
+
+	/*
+	repo_icon = memnew(TextureRect);
+	//bottom_hb->add_child(repo_icon);
+	repo_icon->set_expand(true);
+	repo_icon->set_stretch_mode(TextureRect::STRETCH_KEEP_ASPECT_CENTERED);
+	repo_icon->set_custom_minimum_size(Size2(32 * EDSCALE, 32 * EDSCALE));
+	repo_icon->set_v_size_flags(SIZE_EXPAND_FILL);
+
+	repo = memnew(LinkButton);
+	//bottom_hb->add_child(repo);
+	repo->set_text("");
+	repo->set_underline_mode(LinkButton::UNDERLINE_MODE_ON_HOVER);
+	repo->connect("pressed", this, "_url_clicked");
+	
+
+	Control *offset = memnew(Container);
+	bottom_hb->add_child(offset);
+	offset->set_h_size_flags(SIZE_EXPAND_FILL);
+	offset->set_v_size_flags(SIZE_EXPAND_FILL);
+	*/
+
+	category = memnew(Button);
+	bottom_hb->add_child(category);
+	category->set_text("");
+	category->set_custom_minimum_size(Size2(100, 0));
+	category->connect("pressed", this, "_category_clicked");
+
+	engine_version = memnew(Button);
+	bottom_hb->add_child(engine_version);
+	engine_version->set_custom_minimum_size(Size2(100, 0));
+	engine_version->set_text("3.1");
+
+	channel = memnew(Button);
+	bottom_hb->add_child(channel);
+	channel->set_custom_minimum_size(Size2(100, 0));
+	channel->set_text("Community");
+
+	set_custom_minimum_size(Size2(600, 150));
 	set_h_size_flags(SIZE_EXPAND_FILL);
 
 	set_mouse_filter(MOUSE_FILTER_PASS);
+	set_flat(true);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -163,8 +282,6 @@ void EditorAssetLibraryItemDescription::set_image(int p_type, int p_index, const
 	switch (p_type) {
 
 		case EditorAssetLibrary::IMAGE_QUEUE_ICON: {
-
-			item->call("set_image", p_type, p_index, p_image);
 			icon = p_image;
 		} break;
 		case EditorAssetLibrary::IMAGE_QUEUE_THUMBNAIL: {
@@ -215,7 +332,6 @@ void EditorAssetLibraryItemDescription::_notification(int p_what) {
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE: {
 			previews_bg->add_style_override("panel", get_stylebox("normal", "TextEdit"));
-			desc_bg->add_style_override("panel", get_stylebox("normal", "TextEdit"));
 		} break;
 	}
 }
@@ -252,18 +368,15 @@ void EditorAssetLibraryItemDescription::configure(const String &p_title, int p_a
 
 	asset_id = p_asset_id;
 	title = p_title;
+	version = p_version_string;
+
 	download_url = p_download_url;
 	sha256 = p_sha256_hash;
-	item->configure(p_title, p_asset_id, p_category, p_category_id, p_author, p_author_id, p_rating, p_cost);
 	description->clear();
-	description->add_text(TTR("Version:") + " " + p_version_string + "\n");
-	description->add_text(TTR("Contents:") + " ");
-	description->push_meta(p_browse_url);
-	description->add_text(TTR("View Files"));
+	description->add_text(p_title + " v" + p_version_string + "\n");
+	description->add_text(TTR("Submitted by") + " " + p_author + "\n");
 	description->pop();
-	description->add_text("\n" + TTR("Description:") + "\n\n");
 	description->append_bbcode(p_description);
-	set_title(p_title);
 }
 
 void EditorAssetLibraryItemDescription::add_preview(int p_id, bool p_video, const String &p_url) {
@@ -289,32 +402,32 @@ void EditorAssetLibraryItemDescription::add_preview(int p_id, bool p_video, cons
 
 EditorAssetLibraryItemDescription::EditorAssetLibraryItemDescription() {
 
+	set_v_size_flags(SIZE_EXPAND_FILL);
+
 	VBoxContainer *vbox = memnew(VBoxContainer);
 	add_child(vbox);
+	vbox->set_h_size_flags(SIZE_EXPAND_FILL);
+	vbox->set_v_size_flags(SIZE_EXPAND_FILL);
 
-	HBoxContainer *hbox = memnew(HBoxContainer);
-	vbox->add_child(hbox);
-	vbox->add_constant_override("separation", 15 * EDSCALE);
-	VBoxContainer *desc_vbox = memnew(VBoxContainer);
-	hbox->add_child(desc_vbox);
-	hbox->add_constant_override("separation", 15 * EDSCALE);
-
-	item = memnew(EditorAssetLibraryItem);
-
-	desc_vbox->add_child(item);
-	desc_vbox->set_custom_minimum_size(Size2(300 * EDSCALE, 0));
-
-	desc_bg = memnew(PanelContainer);
-	desc_vbox->add_child(desc_bg);
-	desc_bg->set_v_size_flags(SIZE_EXPAND_FILL);
+	/*
+	desc_scroll = memnew(ScrollContainer);
+	vbox->add_child(desc_scroll);
+	desc_scroll->set_enable_v_scroll(true);
+	desc_scroll->set_enable_h_scroll(false);
+	desc_scroll->set_h_size_flags(SIZE_EXPAND_FILL);
+	desc_scroll->set_v_size_flags(SIZE_EXPAND_FILL);
+	*/
 
 	description = memnew(RichTextLabel);
+	vbox->add_child(description);
+	description->set_h_size_flags(SIZE_EXPAND_FILL);
+	description->set_v_size_flags(SIZE_EXPAND_FILL);
+	description->set_custom_minimum_size(Size2(vbox->get_size().x, 0));
 	description->connect("meta_clicked", this, "_link_click");
-	desc_bg->add_child(description);
 
 	preview = memnew(TextureRect);
-	preview->set_custom_minimum_size(Size2(640 * EDSCALE, 345 * EDSCALE));
-	hbox->add_child(preview);
+	preview->set_custom_minimum_size(Size2(600 * EDSCALE, 300 * EDSCALE));
+	vbox->add_child(preview);
 
 	previews_bg = memnew(PanelContainer);
 	vbox->add_child(previews_bg);
@@ -328,8 +441,6 @@ EditorAssetLibraryItemDescription::EditorAssetLibraryItemDescription() {
 	preview_hb->set_v_size_flags(SIZE_EXPAND_FILL);
 
 	previews->add_child(preview_hb);
-	get_ok()->set_text(TTR("Download"));
-	get_cancel()->set_text(TTR("Close"));
 }
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -404,7 +515,6 @@ void EditorAssetLibraryItemDownload::configure(const String &p_title, int p_asse
 		icon->set_texture(get_icon("DefaultProjectIcon", "EditorIcons"));
 	host = p_download_url;
 	sha256 = p_sha256_hash;
-	asset_installer->connect("confirmed", this, "_close");
 	dismiss->set_normal_texture(get_icon("Close", "EditorIcons"));
 	_make_request();
 }
@@ -935,7 +1045,7 @@ void EditorAssetLibrary::_search(int p_page) {
 		args += "&support=" + support_list.substr(0, support_list.length() - 1);
 	}
 
-	if (categories->get_selected() > 0) {
+	if (categories->get_selected() > 1) {
 
 		args += "&category=" + itos(categories->get_item_metadata(categories->get_selected()));
 	}
@@ -1126,6 +1236,7 @@ void EditorAssetLibrary::_http_request_completed(int p_status, int p_code, const
 
 			categories->clear();
 			categories->add_item(TTR("All"));
+			categories->add_item(TTR("Favorites"));
 			categories->set_item_metadata(0, 0);
 			if (d.has("categories")) {
 				Array clist = d["categories"];
@@ -1152,10 +1263,6 @@ void EditorAssetLibrary::_http_request_completed(int p_status, int p_code, const
 				memdelete(asset_top_page);
 			}
 
-			if (asset_bottom_page) {
-				memdelete(asset_bottom_page);
-			}
-
 			int page = 0;
 			int pages = 1;
 			int page_len = 10;
@@ -1179,23 +1286,20 @@ void EditorAssetLibrary::_http_request_completed(int p_status, int p_code, const
 			}
 
 			asset_top_page = _make_pages(page, pages, page_len, total_items, result.size());
-			library_vb->add_child(asset_top_page);
+			top_box->add_child(asset_top_page);
 
 			asset_items = memnew(GridContainer);
-			asset_items->set_columns(2);
-			asset_items->add_constant_override("hseparation", 10);
-			asset_items->add_constant_override("vseparation", 10);
+			asset_items->set_columns(1);
+			asset_items->add_constant_override("vseparation", 20 * EDSCALE);
 
 			library_vb->add_child(asset_items);
-
-			asset_bottom_page = _make_pages(page, pages, page_len, total_items, result.size());
-			library_vb->add_child(asset_bottom_page);
 
 			for (int i = 0; i < result.size(); i++) {
 
 				Dictionary r = result[i];
 
 				ERR_CONTINUE(!r.has("title"));
+				ERR_CONTINUE(!r.has("version_string"));
 				ERR_CONTINUE(!r.has("asset_id"));
 				ERR_CONTINUE(!r.has("author"));
 				ERR_CONTINUE(!r.has("author_id"));
@@ -1206,7 +1310,7 @@ void EditorAssetLibrary::_http_request_completed(int p_status, int p_code, const
 
 				EditorAssetLibraryItem *item = memnew(EditorAssetLibraryItem);
 				asset_items->add_child(item);
-				item->configure(r["title"], r["asset_id"], category_map[r["category_id"]], r["category_id"], r["author"], r["author_id"], r["rating"], r["cost"]);
+				item->configure(r["title"], r["version_string"], r["asset_id"], category_map[r["category_id"]], r["category_id"], r["author"], r["author_id"], r["rating"], r["cost"]);
 				item->connect("asset_selected", this, "_select_asset");
 				item->connect("author_selected", this, "_select_author");
 				item->connect("category_selected", this, "_select_category");
@@ -1239,9 +1343,7 @@ void EditorAssetLibrary::_http_request_completed(int p_status, int p_code, const
 			}
 
 			description = memnew(EditorAssetLibraryItemDescription);
-			add_child(description);
-			description->popup_centered_minsize();
-			description->connect("confirmed", this, "_install_asset");
+			item_scroll->add_child(description);
 
 			description->configure(r["title"], r["asset_id"], category_map[r["category_id"]], r["category_id"], r["author"], r["author_id"], r["rating"], r["cost"], r["version"], r["version_string"], r["description"], r["download_url"], r["browse_url"], r["download_hash"]);
 			/*item->connect("asset_selected",this,"_select_asset");
@@ -1406,6 +1508,7 @@ EditorAssetLibrary::EditorAssetLibrary(bool p_templates_only) {
 	search_hb2->add_child(memnew(Label(TTR("Category:") + " ")));
 	categories = memnew(OptionButton);
 	categories->add_item(TTR("All"));
+	categories->add_item(TTR("Favorites"));
 	search_hb2->add_child(categories);
 	categories->set_h_size_flags(SIZE_EXPAND_FILL);
 	//search_hb2->add_spacer();
@@ -1440,9 +1543,30 @@ EditorAssetLibrary::EditorAssetLibrary(bool p_templates_only) {
 
 	/////////
 
+	splitter = memnew(HSplitContainer);
+	splitter->set_h_size_flags(SIZE_EXPAND_FILL);
+	splitter->set_v_size_flags(SIZE_EXPAND_FILL);
+	library_main->add_child(splitter);
+
+	/////////
+
 	library_scroll_bg = memnew(PanelContainer);
-	library_main->add_child(library_scroll_bg);
+
+	top_box = memnew(PanelContainer);
+	top_box->set_h_size_flags(SIZE_EXPAND_FILL);
+
+	page_vb = memnew(VBoxContainer);
+	page_vb->set_h_size_flags(SIZE_EXPAND_FILL);
+	page_vb->add_child(top_box);
+	page_vb->add_child(library_scroll_bg);
+
+	splitter->add_child(page_vb);
 	library_scroll_bg->set_v_size_flags(SIZE_EXPAND_FILL);
+
+	item_scroll = memnew(ScrollContainer);
+	splitter->add_child(item_scroll);
+	item_scroll->set_h_size_flags(SIZE_EXPAND_FILL);
+	item_scroll->set_v_size_flags(SIZE_EXPAND_FILL);
 
 	library_scroll = memnew(ScrollContainer);
 	library_scroll->set_enable_v_scroll(true);
@@ -1478,9 +1602,6 @@ EditorAssetLibrary::EditorAssetLibrary(bool p_templates_only) {
 	asset_items->add_constant_override("vseparation", 10);
 
 	library_vb->add_child(asset_items);
-
-	asset_bottom_page = memnew(HBoxContainer);
-	library_vb->add_child(asset_bottom_page);
 
 	request = memnew(HTTPRequest);
 	add_child(request);
