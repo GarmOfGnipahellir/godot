@@ -21,6 +21,36 @@ namespace Godot
         public const real_t Epsilon = 1e-06f;
 #endif
 
+        public static Vector2 Min(Vector2 a, Vector2 b)
+        {
+            return new Vector2(Min(a.x, b.x), Min(a.y, b.y));
+        }
+
+        public static Vector3 Min(Vector3 a, Vector3 b)
+        {
+            return new Vector3(Min(a.x, b.x), Min(a.y, b.y), Min(a.z, b.z));
+        }
+
+        public static Vector2 Max(Vector2 a, Vector2 b)
+        {
+            return new Vector2(Max(a.x, b.x), Max(a.y, b.y));
+        }
+
+        public static Vector3 Max(Vector3 a, Vector3 b)
+        {
+            return new Vector3(Max(a.x, b.x), Max(a.y, b.y), Max(a.z, b.z));
+        }
+
+        public static Vector2 Clamp(Vector2 value, Vector2 min, Vector2 max)
+        {
+            return new Vector2(Clamp(value.x, min.x, max.x), Clamp(value.y, min.y, max.y));
+        }
+
+        public static Vector3 Clamp(Vector3 value, Vector3 min, Vector3 max)
+        {
+            return new Vector3(Clamp(value.x, min.x, max.x), Clamp(value.y, min.y, max.y), Clamp(value.z, min.z, max.z));
+        }
+
         public static int DecimalCount(real_t s)
         {
             return DecimalCount((decimal)s);
