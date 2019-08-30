@@ -2964,7 +2964,9 @@ ShaderLanguage::Node *ShaderLanguage::_parse_expression(BlockNode *p_block, cons
 				if (array_size > 0) {
 					tk = _get_token();
 
-					if (tk.type != TK_BRACKET_OPEN && tk.type != TK_PERIOD) {
+					if (p_block && p_block->type == Node::TYPE_FUNCTION) {
+
+					} else if (tk.type != TK_BRACKET_OPEN && tk.type != TK_PERIOD) {
 						_set_error("Expected '[' or '.'");
 						return NULL;
 					}
@@ -5058,6 +5060,7 @@ Error ShaderLanguage::_parse_shader(const Map<StringName, FunctionInfo> &p_funct
 					DataType ptype;
 					StringName pname;
 					DataPrecision pprecision = PRECISION_DEFAULT;
+					int array_size = 0;
 
 					if (is_token_precision(tk.type)) {
 						pprecision = get_token_precision(tk.type);
@@ -5079,8 +5082,19 @@ Error ShaderLanguage::_parse_shader(const Map<StringName, FunctionInfo> &p_funct
 					tk = _get_token();
 
 					if (tk.type == TK_BRACKET_OPEN) {
-						_set_error("Arrays as parameters are not implemented yet");
-						return ERR_PARSE_ERROR;
+						tk = _get_token();
+						if (tk.type == TK_INT_CONSTANT && ((int)tk.constant) > 0) {
+							array_size = (int)tk.constant;
+							tk = _get_token();
+							if (tk.type != TK_BRACKET_CLOSE) {
+								_set_error("Expected ']'");
+								return ERR_PARSE_ERROR;
+							}
+							tk = _get_token();
+						} else {
+							_set_error("Expected integer constant > 0");
+							return ERR_PARSE_ERROR;
+						}
 					}
 					if (tk.type != TK_IDENTIFIER) {
 						_set_error("Expected identifier for argument name");
@@ -5098,13 +5112,29 @@ Error ShaderLanguage::_parse_shader(const Map<StringName, FunctionInfo> &p_funct
 					arg.name = pname;
 					arg.precision = pprecision;
 					arg.qualifier = qualifier;
+					arg.array_size = array_size;
 
 					func_node->arguments.push_back(arg);
 
 					tk = _get_token();
 					if (tk.type == TK_BRACKET_OPEN) {
-						_set_error("Arrays as parameters are not implemented yet");
-						return ERR_PARSE_ERROR;
+						if (arg.array_size != 0) {
+							_set_error("Array size is already defined");
+							return ERR_PARSE_ERROR;
+						}
+						tk = _get_token();
+						if (tk.type == TK_INT_CONSTANT && ((int)tk.constant) > 0) {
+							arg.array_size = (int)tk.constant;
+							tk = _get_token();
+							if (tk.type != TK_BRACKET_CLOSE) {
+								_set_error("Expected ']'");
+								return ERR_PARSE_ERROR;
+							}
+							tk = _get_token();
+						} else {
+							_set_error("Expected integer constant > 0");
+							return ERR_PARSE_ERROR;
+						}
 					}
 
 					if (tk.type == TK_COMMA) {

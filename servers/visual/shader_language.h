@@ -483,6 +483,7 @@ public:
 			StringName name;
 			DataType type;
 			DataPrecision precision;
+			int array_size;
 		};
 
 		StringName name;
