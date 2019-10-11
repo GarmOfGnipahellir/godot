@@ -401,6 +401,7 @@ public:
 
 	struct ConstantNode : public Node {
 		DataType datatype;
+		int array_size;
 
 		union Value {
 			bool boolean;
@@ -409,12 +410,15 @@ public:
 			uint32_t uint;
 		};
 
+		Vector<ArrayDeclarationNode::Declaration> array_declarations;
+
 		Vector<Value> values;
 		virtual DataType get_datatype() const { return datatype; }
 
 		ConstantNode() :
 				Node(TYPE_CONSTANT),
-				datatype(TYPE_VOID) {}
+				datatype(TYPE_VOID),
+				array_size(0) {}
 	};
 
 	struct FunctionNode;
@@ -506,6 +510,7 @@ public:
 			DataType type;
 			DataPrecision precision;
 			ConstantNode *initializer;
+			int array_size;
 		};
 
 		struct Function {

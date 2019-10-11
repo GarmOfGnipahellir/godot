@@ -949,6 +949,9 @@ bool ShaderLanguage::_find_identifier(const BlockNode *p_block, const Map<String
 		if (r_data_type) {
 			*r_data_type = shader->constants[p_identifier].type;
 		}
+		if (r_array_size) {
+			*r_array_size = shader->constants[p_identifier].array_size;
+		}
 		if (r_type) {
 			*r_type = IDENTIFIER_CONSTANT;
 		}
@@ -5025,6 +5028,34 @@ Error ShaderLanguage::_parse_shader(const Map<StringName, FunctionInfo> &p_funct
 						constant.type = type;
 						constant.precision = precision;
 						constant.initializer = NULL;
+						constant.array_size = 0;
+
+						bool unknown_size = false;
+
+						if (tk.type == TK_BRACKET_OPEN) {
+
+							if (VisualServer::get_singleton()->is_low_end()) {
+								_set_error("Global const arrays are supported only on high-end platform!");
+								return ERR_PARSE_ERROR;
+							}
+
+							tk = _get_token();
+							if (tk.type == TK_BRACKET_CLOSE) {
+								unknown_size = true;
+								tk = _get_token();
+							} else if (tk.type == TK_INT_CONSTANT && ((int)tk.constant) > 0) {
+								constant.array_size = (int)tk.constant;
+								tk = _get_token();
+								if (tk.type != TK_BRACKET_CLOSE) {
+									_set_error("Expected ']'");
+									return ERR_PARSE_ERROR;
+								}
+								tk = _get_token();
+							} else {
+								_set_error("Expected integer constant > 0 or ']'");
+								return ERR_PARSE_ERROR;
+							}
+						}
 
 						if (tk.type == TK_OP_ASSIGN) {
 
@@ -5033,26 +5064,197 @@ Error ShaderLanguage::_parse_shader(const Map<StringName, FunctionInfo> &p_funct
 								return ERR_PARSE_ERROR;
 							}
 
-							//variable created with assignment! must parse an expression
-							Node *expr = _parse_and_reduce_expression(NULL, Map<StringName, BuiltInInfo>());
-							if (!expr)
-								return ERR_PARSE_ERROR;
+							if (constant.array_size > 0 || unknown_size) {
 
-							if (expr->type != Node::TYPE_CONSTANT) {
-								_set_error("Expected constant expression after '='");
-								return ERR_PARSE_ERROR;
-							}
+								bool full_def = false;
 
-							constant.initializer = static_cast<ConstantNode *>(expr);
+								ArrayDeclarationNode::Declaration decl;
+								decl.name = name;
+								decl.size = constant.array_size;
 
-							if (type != expr->get_datatype()) {
-								_set_error("Invalid assignment of '" + get_datatype_name(expr->get_datatype()) + "' to '" + get_datatype_name(type) + "'");
-								return ERR_PARSE_ERROR;
+								tk = _get_token();
+
+								if (tk.type != TK_CURLY_BRACKET_OPEN) {
+
+									if (unknown_size) {
+										_set_error("Expected '{'");
+										return ERR_PARSE_ERROR;
+									}
+
+									full_def = true;
+
+									DataPrecision precision2 = PRECISION_DEFAULT;
+									if (is_token_precision(tk.type)) {
+										precision2 = get_token_precision(tk.type);
+										tk = _get_token();
+										if (!is_token_nonvoid_datatype(tk.type)) {
+											_set_error("Expected datatype after precision");
+											return ERR_PARSE_ERROR;
+										}
+									}
+									if (!is_token_variable_datatype(tk.type)) {
+										_set_error("Invalid data type for array");
+										return ERR_PARSE_ERROR;
+									}
+									DataType type2 = get_token_datatype(tk.type);
+
+									int array_size2 = 0;
+
+									tk = _get_token();
+									if (tk.type == TK_BRACKET_OPEN) {
+										Node *n = _parse_and_reduce_expression(NULL, Map<StringName, BuiltInInfo>());
+										if (!n || n->type != Node::TYPE_CONSTANT || n->get_datatype() != TYPE_INT) {
+											_set_error("Expected single integer constant > 0");
+											return ERR_PARSE_ERROR;
+										}
+
+										ConstantNode *cnode = (ConstantNode *)n;
+										if (cnode->values.size() == 1) {
+											array_size2 = cnode->values[0].sint;
+											if (array_size2 <= 0) {
+												_set_error("Expected single integer constant > 0");
+												return ERR_PARSE_ERROR;
+											}
+										} else {
+											_set_error("Expected single integer constant > 0");
+											return ERR_PARSE_ERROR;
+										}
+
+										tk = _get_token();
+										if (tk.type != TK_BRACKET_CLOSE) {
+											_set_error("Expected ']");
+											return ERR_PARSE_ERROR;
+										} else {
+											tk = _get_token();
+										}
+									} else {
+										_set_error("Expected '[");
+										return ERR_PARSE_ERROR;
+									}
+
+									if (constant.precision != precision2 || constant.type != type2 || constant.array_size != array_size2) {
+										String error_str = "Cannot convert from '";
+										if (precision2 != PRECISION_DEFAULT) {
+											error_str += get_precision_name(precision2);
+											error_str += " ";
+										}
+										error_str += get_datatype_name(type2);
+										error_str += "[";
+										error_str += itos(array_size2);
+										error_str += "]'";
+										error_str += " to '";
+										if (precision != PRECISION_DEFAULT) {
+											error_str += get_precision_name(precision);
+											error_str += " ";
+										}
+										error_str += get_datatype_name(type);
+										error_str += "[";
+										error_str += itos(constant.array_size);
+										error_str += "]'";
+										_set_error(error_str);
+										return ERR_PARSE_ERROR;
+									}
+								}
+
+								bool curly = tk.type == TK_CURLY_BRACKET_OPEN;
+
+								if (unknown_size) {
+									if (!curly) {
+										_set_error("Expected '{'");
+										return ERR_PARSE_ERROR;
+									}
+								} else {
+									if (full_def) {
+										if (curly) {
+											_set_error("Expected '('");
+											return ERR_PARSE_ERROR;
+										}
+									}
+								}
+
+								if (tk.type == TK_PARENTHESIS_OPEN || curly) { // initialization
+									while (true) {
+
+										Node *n = _parse_and_reduce_expression(NULL, Map<StringName, BuiltInInfo>());
+										if (!n) {
+											return ERR_PARSE_ERROR;
+										}
+
+										if (n->type == Node::TYPE_OPERATOR && ((OperatorNode *)n)->op == OP_CALL) {
+											_set_error("Expected constant expression");
+											return ERR_PARSE_ERROR;
+										}
+
+										if (constant.type != n->get_datatype()) {
+											_set_error("Invalid assignment of '" + get_datatype_name(n->get_datatype()) + "' to '" + get_datatype_name(constant.type) + "'");
+											return ERR_PARSE_ERROR;
+										}
+
+										tk = _get_token();
+										if (tk.type == TK_COMMA) {
+											decl.initializer.push_back(n);
+											continue;
+										} else if (!curly && tk.type == TK_PARENTHESIS_CLOSE) {
+											decl.initializer.push_back(n);
+											break;
+										} else if (curly && tk.type == TK_CURLY_BRACKET_CLOSE) {
+											decl.initializer.push_back(n);
+											break;
+										} else {
+											if (curly)
+												_set_error("Expected '}' or ','");
+											else
+												_set_error("Expected ')' or ','");
+											return ERR_PARSE_ERROR;
+										}
+									}
+									if (unknown_size) {
+										decl.size = decl.initializer.size();
+										constant.array_size = decl.initializer.size();
+									} else if (decl.initializer.size() != constant.array_size) {
+										_set_error("Array size mismatch");
+										return ERR_PARSE_ERROR;
+									}
+								}
+
+								ConstantNode *expr = memnew(ConstantNode);
+
+								expr->datatype = constant.type;
+
+								expr->array_size = constant.array_size;
+
+								expr->array_declarations.push_back(decl);
+
+								constant.initializer = expr;
+
+							} else {
+
+								//variable created with assignment! must parse an expression
+								Node *expr = _parse_and_reduce_expression(NULL, Map<StringName, BuiltInInfo>());
+								if (!expr)
+									return ERR_PARSE_ERROR;
+
+								if (expr->type != Node::TYPE_CONSTANT) {
+									_set_error("Expected constant expression after '='");
+									return ERR_PARSE_ERROR;
+								}
+
+								constant.initializer = static_cast<ConstantNode *>(expr);
+
+								if (type != expr->get_datatype()) {
+									_set_error("Invalid assignment of '" + get_datatype_name(expr->get_datatype()) + "' to '" + get_datatype_name(type) + "'");
+									return ERR_PARSE_ERROR;
+								}
 							}
 							tk = _get_token();
 						} else {
-							_set_error("Expected initialization of constant");
-							return ERR_PARSE_ERROR;
+							if (unknown_size) {
+								_set_error("Expected array initialization");
+								return ERR_PARSE_ERROR;
+							} else {
+								_set_error("Expected initialization of constant");
+								return ERR_PARSE_ERROR;
+							}
 						}
 
 						shader->constants[name] = constant;
