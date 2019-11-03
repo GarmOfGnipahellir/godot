@@ -1021,23 +1021,23 @@ Ref<Theme> create_editor_theme(const Ref<Theme> p_theme) {
 
 	// GraphNode
 
-	const float mv = dark_theme ? 0.0 : 1.0;
-	const float mv2 = 1.0 - mv;
+	const Vector3 mv = dark_theme ? Vector3(0.0, 0.0, 0.0) : Vector3(base_color.r, base_color.g, base_color.b);
+	const Vector3 mv2 = Vector3(1.0, 1.0, 1.0) - mv;
 	const int gn_margin_side = 28;
-	Ref<StyleBoxFlat> graphsb = make_flat_stylebox(Color(mv, mv, mv, 0.7), gn_margin_side, 24, gn_margin_side, 5);
+	Ref<StyleBoxFlat> graphsb = make_flat_stylebox(Color(mv.x, mv.y, mv.z, 0.7), gn_margin_side, 24, gn_margin_side, 5);
 	graphsb->set_border_width_all(border_width);
-	graphsb->set_border_color(Color(mv2, mv2, mv2, 0.9));
-	Ref<StyleBoxFlat> graphsbselected = make_flat_stylebox(Color(mv, mv, mv, 0.9), gn_margin_side, 24, gn_margin_side, 5);
+	graphsb->set_border_color(Color(mv2.x, mv2.y, mv2.z, 0.9));
+	Ref<StyleBoxFlat> graphsbselected = make_flat_stylebox(Color(mv.x, mv.y, mv.z, 0.9), gn_margin_side, 24, gn_margin_side, 5);
 	graphsbselected->set_border_width_all(border_width);
 	graphsbselected->set_border_color(Color(accent_color.r, accent_color.g, accent_color.b, 0.9));
 	graphsbselected->set_shadow_size(8 * EDSCALE);
 	graphsbselected->set_shadow_color(shadow_color);
-	Ref<StyleBoxFlat> graphsbcomment = make_flat_stylebox(Color(mv, mv, mv, 0.3), gn_margin_side, 24, gn_margin_side, 5);
+	Ref<StyleBoxFlat> graphsbcomment = make_flat_stylebox(Color(mv.x, mv.y, mv.z, 0.3), gn_margin_side, 24, gn_margin_side, 5);
 	graphsbcomment->set_border_width_all(border_width);
-	graphsbcomment->set_border_color(Color(mv2, mv2, mv2, 0.9));
-	Ref<StyleBoxFlat> graphsbcommentselected = make_flat_stylebox(Color(mv, mv, mv, 0.4), gn_margin_side, 24, gn_margin_side, 5);
+	graphsbcomment->set_border_color(Color(mv2.x, mv2.y, mv2.z, 0.9));
+	Ref<StyleBoxFlat> graphsbcommentselected = make_flat_stylebox(Color(mv.x, mv.y, mv.z, 0.4), gn_margin_side, 24, gn_margin_side, 5);
 	graphsbcommentselected->set_border_width_all(border_width);
-	graphsbcommentselected->set_border_color(Color(mv2, mv2, mv2, 0.9));
+	graphsbcommentselected->set_border_color(Color(mv2.x, mv2.y, mv2.z, 0.9));
 	Ref<StyleBoxFlat> graphsbbreakpoint = graphsbselected->duplicate();
 	graphsbbreakpoint->set_draw_center(false);
 	graphsbbreakpoint->set_border_color(warning_color);
@@ -1046,10 +1046,10 @@ Ref<Theme> create_editor_theme(const Ref<Theme> p_theme) {
 	graphsbposition->set_draw_center(false);
 	graphsbposition->set_border_color(error_color);
 	graphsbposition->set_shadow_color(error_color * Color(1.0, 1.0, 1.0, 0.2));
-	Ref<StyleBoxFlat> smgraphsb = make_flat_stylebox(Color(mv, mv, mv, 0.7), gn_margin_side, 24, gn_margin_side, 5);
+	Ref<StyleBoxFlat> smgraphsb = make_flat_stylebox(Color(mv.x, mv.y, mv.z, 0.7), gn_margin_side, 24, gn_margin_side, 5);
 	smgraphsb->set_border_width_all(border_width);
-	smgraphsb->set_border_color(Color(mv2, mv2, mv2, 0.9));
-	Ref<StyleBoxFlat> smgraphsbselected = make_flat_stylebox(Color(mv, mv, mv, 0.9), gn_margin_side, 24, gn_margin_side, 5);
+	smgraphsb->set_border_color(Color(mv2.x, mv2.y, mv2.z, 0.9));
+	Ref<StyleBoxFlat> smgraphsbselected = make_flat_stylebox(Color(mv.x, mv.y, mv.z, 0.9), gn_margin_side, 24, gn_margin_side, 5);
 	smgraphsbselected->set_border_width_all(border_width);
 	smgraphsbselected->set_border_color(Color(accent_color.r, accent_color.g, accent_color.b, 0.9));
 	smgraphsbselected->set_shadow_size(8 * EDSCALE);
@@ -1071,7 +1071,7 @@ Ref<Theme> create_editor_theme(const Ref<Theme> p_theme) {
 	theme->set_stylebox("state_machine_frame", "GraphNode", smgraphsb);
 	theme->set_stylebox("state_machine_selectedframe", "GraphNode", smgraphsbselected);
 
-	Color default_node_color = Color(mv2, mv2, mv2);
+	Color default_node_color = Color(mv2.x, mv2.y, mv2.z);
 	theme->set_color("title_color", "GraphNode", default_node_color);
 	default_node_color.a = 0.7;
 	theme->set_color("close_color", "GraphNode", default_node_color);
