@@ -874,6 +874,7 @@ ShaderCompilerGLES3::ShaderCompilerGLES3() {
 	actions[VS::SHADER_CANVAS_ITEM].render_mode_defines["geometry_in_points"] = "#define GEOMETRY_IN_MODE 0\n";
 	actions[VS::SHADER_CANVAS_ITEM].render_mode_defines["geometry_in_lines"] = "#define GEOMETRY_IN_MODE 1\n";
 	actions[VS::SHADER_CANVAS_ITEM].render_mode_defines["geometry_in_triangles"] = "#define GEOMETRY_IN_MODE 2\n";
+	actions[VS::SHADER_CANVAS_ITEM].render_mode_defines["geometry_in_lines_adjacent"] = "#define GEOMETRY_IN_MODE 3\n";
 
 	actions[VS::SHADER_CANVAS_ITEM].render_mode_defines["geometry_out_points"] = "#define GEOMETRY_OUT_MODE 0\n";
 	actions[VS::SHADER_CANVAS_ITEM].render_mode_defines["geometry_out_lines"] = "#define GEOMETRY_OUT_MODE 1\n";
@@ -994,6 +995,7 @@ ShaderCompilerGLES3::ShaderCompilerGLES3() {
 	actions[VS::SHADER_SPATIAL].render_mode_defines["geometry_in_points"] = "#define GEOMETRY_IN_MODE 0\n";
 	actions[VS::SHADER_SPATIAL].render_mode_defines["geometry_in_lines"] = "#define GEOMETRY_IN_MODE 1\n";
 	actions[VS::SHADER_SPATIAL].render_mode_defines["geometry_in_triangles"] = "#define GEOMETRY_IN_MODE 2\n";
+	actions[VS::SHADER_SPATIAL].render_mode_defines["geometry_in_lines_adjacent"] = "#define GEOMETRY_IN_MODE 3\n";
 
 	actions[VS::SHADER_SPATIAL].render_mode_defines["geometry_out_points"] = "#define GEOMETRY_OUT_MODE 0\n";
 	actions[VS::SHADER_SPATIAL].render_mode_defines["geometry_out_lines"] = "#define GEOMETRY_OUT_MODE 1\n";

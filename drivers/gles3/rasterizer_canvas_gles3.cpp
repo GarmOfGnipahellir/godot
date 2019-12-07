@@ -525,7 +525,8 @@ static const GLenum gl_primitive[] = {
 	GL_LINE_LOOP,
 	GL_TRIANGLES,
 	GL_TRIANGLE_STRIP,
-	GL_TRIANGLE_FAN
+	GL_TRIANGLE_FAN,
+	GL_LINE_STRIP_ADJACENCY
 };
 
 void RasterizerCanvasGLES3::_canvas_item_render_commands(Item *p_item, Item *current_clip, bool &reclip) {

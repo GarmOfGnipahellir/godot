@@ -1538,7 +1538,8 @@ static const GLenum gl_primitive[] = {
 	GL_LINE_LOOP,
 	GL_TRIANGLES,
 	GL_TRIANGLE_STRIP,
-	GL_TRIANGLE_FAN
+	GL_TRIANGLE_FAN,
+	GL_LINE_STRIP_ADJACENCY
 };
 
 void RasterizerSceneGLES3::_render_geometry(RenderList::Element *e) {

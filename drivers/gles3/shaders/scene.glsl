@@ -597,6 +597,8 @@ layout (points) in;
 layout (lines) in;
 #elif GEOMETRY_IN_MODE == 2
 layout (triangles) in;
+#elif GEOMETRY_IN_MODE == 3
+layout (lines_adjacency) in;
 #endif
 
 #if GEOMETRY_OUT_MODE == 0

@@ -120,6 +120,7 @@ ShaderTypes::ShaderTypes() {
 	shader_modes[VS::SHADER_SPATIAL].modes.push_back("geometry_in_points");
 	shader_modes[VS::SHADER_SPATIAL].modes.push_back("geometry_in_lines");
 	shader_modes[VS::SHADER_SPATIAL].modes.push_back("geometry_in_triangles");
+	shader_modes[VS::SHADER_SPATIAL].modes.push_back("geometry_in_lines_adjacent");
 	shader_modes[VS::SHADER_SPATIAL].modes.push_back("geometry_out_points");
 	shader_modes[VS::SHADER_SPATIAL].modes.push_back("geometry_out_lines");
 	shader_modes[VS::SHADER_SPATIAL].modes.push_back("geometry_out_triangles");
@@ -281,6 +282,7 @@ ShaderTypes::ShaderTypes() {
 	shader_modes[VS::SHADER_CANVAS_ITEM].modes.push_back("geometry_in_points");
 	shader_modes[VS::SHADER_CANVAS_ITEM].modes.push_back("geometry_in_lines");
 	shader_modes[VS::SHADER_CANVAS_ITEM].modes.push_back("geometry_in_triangles");
+	shader_modes[VS::SHADER_CANVAS_ITEM].modes.push_back("geometry_in_lines_adjacent");
 	shader_modes[VS::SHADER_CANVAS_ITEM].modes.push_back("geometry_out_points");
 	shader_modes[VS::SHADER_CANVAS_ITEM].modes.push_back("geometry_out_lines");
 	shader_modes[VS::SHADER_CANVAS_ITEM].modes.push_back("geometry_out_triangles");
